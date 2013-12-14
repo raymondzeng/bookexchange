@@ -12,6 +12,7 @@ html{
 }
 #searchbar{
     display: none;
+    margin:5px;
     padding: 10px;
     background: #383838;
 }
