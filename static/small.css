@@ -2,7 +2,7 @@
     font-size: 20px;
 }
 
-#menu ul li{
-    display: inline;
-    
+#menu ul li a{
+    text-align: center;
+    font-size: 15px;
 }
