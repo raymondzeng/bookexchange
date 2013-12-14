@@ -10,9 +10,11 @@ html{
 :-ms-input-placeholder{
     font-style: italic;
 }
+#menu{
+    padding:5px;
+}
 #searchbar{
     display: none;
-    margin:5px;
     padding: 10px;
     background: #383838;
 }
