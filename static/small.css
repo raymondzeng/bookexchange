@@ -1,3 +1,9 @@
 #sitelogo{
     font-size: 20px;
 }
+
+#menu ul li{
+    color: red;
+    display: inline;
+    text-align: center;
+}
