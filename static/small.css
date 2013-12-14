@@ -1,8 +1,11 @@
 
-
 #menu{
     background: black;
 }
 body{
+    width: auto;
+}
+html{
+    background-image: none;
     width: auto;
 }
