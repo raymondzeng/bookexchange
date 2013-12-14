@@ -8,15 +8,28 @@
     <link rel="stylesheet" href="/static/style.css" type="text/css"/>
     <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 480px)" href="/static/small.css"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/scripts.js"></script>
   </head>
   <body>
     <div class="pure-menu pure-menu-open pure-menu-horizontal" id="menu">
       <a href="#" class="pure-menu-heading" id="sitelogo">The Book Exchange</a>
-      <ul class="pure-hidden-phone">
+      <ul>
         <li class="pure-menu-selected"><a href="#">Home</a></li>
-        <li><a href="#">Search Books</a></li>
-        <li><a href="#">Sell</a></li>
+        <li><a href="#" id="search-a">Search Books</a></li>
+        <li><a href="#">Sell Books</a></li>
+	<li><a href="#">Account</a></li>
       </ul>
     </div>
+    
+    <div id="searchbar">
+      <form class="pure-form">
+	<input type="text" class="pure-input-rounded" placeholder="Search for a book">
+	<button type="submit" class="pure-button pure-button-primary">Search</button>
+	<a href="#">Advanced Search</a>
+      </form>
+    </div>
+
+    <div>
+      <h1>Placeholder Text</h1>
   </body>
 </html>

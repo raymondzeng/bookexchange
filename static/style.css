@@ -1,3 +1,17 @@
 html{
     background-image: url('wood3.jpg');
 }
+::-webkit-input-placeholder{
+    font-style: italic;
+}
+:-moz-placeholder{
+    font-style: italic;
+}
+:-ms-input-placeholder{
+    font-style: italic;
+}
+#searchbar{
+    display: none;
+    padding: 10px;
+    background: #383838;
+}
