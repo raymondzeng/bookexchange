@@ -11,10 +11,11 @@ html{
     font-style: italic;
 }
 #menu{
-    padding:5px;
+    padding-bottom:5px;
 }
 #searchbar{
     display: none;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom:10px;
     background: #383838;
 }
