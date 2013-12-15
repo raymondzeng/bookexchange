@@ -6,7 +6,8 @@
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
     <link rel="stylesheet" href="/static/style.css" type="text/css"/>
-    <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 480px)" href="/static/small.css"/>
+    <link rel="stylesheet" href="/static/small.css" type="text/css" media="only screen and (max-device-width: 480px)"/>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="/static/scripts.js"></script>
   </head>
@@ -23,9 +24,41 @@
     <div id="searchbar">
       <form class="pure-form">
 	<input type="text" class="pure-input-rounded" placeholder="Search for a book">
-	<button type="submit" class="pure-button pure-button-primary">Search</button>
-	<a href="#">Advanced Search</a>
+	<button type="submit" class="pure-button pure-button-primary">
+	  <i class="icon-cog"></i>
+	  Search
+	</button>
+	<a href="#" id="as-button">Advanced Search</a>
       </form>
+
+      <div id="advancedsearch">
+	<form class="pure-form pure-form-aligned">
+	  <fieldset>
+            <div class="pure-control-group">
+              <label for="as-ISBN">ISBN</label>
+              <input id="as-ISBN" type="text" placeholder="978-0691153100">
+            </div>
+	    
+            <div class="pure-control-group">
+              <label for="as-title">Title</label>
+              <input id="as-title" type="text" placeholder="All Things Considered">
+            </div>
+	    
+            <div class="pure-control-group">
+              <label for="as-author">Author</label>
+              <input id="as-author" type="text" placeholder="Chih-p'ing Chou">
+            </div>
+	    
+	    <div class="pure-control-group">
+              <label for="as-class">Class Code</label>
+              <input id="as-class" type="text" placeholder="CHIN500">
+            </div>
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+	    <button class="pure-button" id="as-cancel">Cancel</button>
+	  </fieldset>
+	</form>
+      </div>
     </div>
+    
   </body>
 </html>
