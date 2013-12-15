@@ -1,5 +1,5 @@
 html{
-    background-image: url('wood3.jpg');
+    background: #505050;
 }
 ::-webkit-input-placeholder{
     font-style: italic;
@@ -56,4 +56,36 @@ html{
 }
 #advancedsearch label{
     color: white;
+}
+
+.banner{
+    background: transparent url('http://24.media.tumblr.com/8f213cdd84ea045e2bb00d88437efe14/tumblr_mx7f3dxnyf1rybxnmo1_500.jpg') 0 0 no-repeat fixed;
+    text-align: center;
+    background-size: cover;
+    height: 350px;
+    width: 100%;
+    display: table;
+}
+
+#home{
+    margin: 40px;
+    text-align: center;
+}
+
+#login, #welcome{
+    background: white;
+    padding: 10px;
+    -webkit-box-shadow: 2px 4px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 4px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 2px 4px 5px 0px rgba(0,0,0,0.75);
+}
+
+#login {
+    width: 20%;
+    margin-right: 2.5%;
+}
+#welcome {
+    width: 70%;
+    text-align: center;
+    font-size: 35px;
 }
