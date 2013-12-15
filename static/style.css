@@ -85,6 +85,10 @@ html{
     width: 20%;
     margin-right: 2.5%;
 }
+#login button{
+    margin-top: 10px;
+    margin-bottom: -10px;
+}
 #welcome {
     width: 70%;
     text-align: center;

@@ -1,3 +1,7 @@
+html{
+    background-image: url("http://24.media.tumblr.com/8f213cdd84ea045e2bb00d88437efe14/tumblr_mx7f3dxnyf1rybxnmo1_500.jpg");
+}
+
 #sitelogo{
     font-size: 20px;
 }
@@ -20,4 +24,15 @@
 
 #advancedsearch form fieldset input{
     width: 100%
+}
+
+#home{
+    margin: 0px;
+}
+#login{
+    margin: 0px;
+    width: 100%;
+}
+#welcome{
+    display: none;
 }
