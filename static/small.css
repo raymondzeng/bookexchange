@@ -26,13 +26,17 @@ html{
     width: 100%
 }
 
+#banner {
+    display: none;
+}
 #home{
     margin: 0px;
 }
 #login{
-    margin: 0px;
+    margin: 10px;
     width: 100%;
 }
 #welcome{
-    display: none;
+    width: 100%;
+    font-size: 20px;
 }
