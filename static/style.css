@@ -1,5 +1,5 @@
 html{
-    background: #383838;
+    background: #505050;
 }
 ::-webkit-input-placeholder{
     font-style: italic;
@@ -9,6 +9,11 @@ html{
 }
 :-ms-input-placeholder{
     font-style: italic;
+}
+
+#top-page{
+    position: fixed;
+    width: 100%;
 }
 
 #searchbar{
@@ -76,6 +81,7 @@ html{
     background: white;
     padding: 10px;
     border: 1px solid black;
+    border-radius: 5px;
 }
 
 #login {
