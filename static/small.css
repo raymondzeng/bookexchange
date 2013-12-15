@@ -13,3 +13,11 @@
 #searchbar form input{
     width: 100%;
 }
+
+#searchbar form button{
+    text-align: center;
+}
+
+#advancedsearch form fieldset input{
+    width: 100%
+}
