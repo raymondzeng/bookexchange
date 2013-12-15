@@ -1,5 +1,5 @@
 html{
-    background-image: url("http://24.media.tumblr.com/8f213cdd84ea045e2bb00d88437efe14/tumblr_mx7f3dxnyf1rybxnmo1_500.jpg");
+    background-image: url("http://24.media.tumblr.com/8f213cdd84ea045e2bb00d88437efe14/tumblr_mx7f3dxnyf1rybxnmo1_500.jpg") no-repeat fixed;
 }
 
 #sitelogo{
@@ -26,9 +26,10 @@ html{
     width: 100%
 }
 
-#banner {
+.banner{
     display: none;
 }
+
 #home{
     margin: 0px;
 }
