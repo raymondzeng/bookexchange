@@ -4,6 +4,7 @@
 
 #menu{
     padding-bottom: 5px;
+    width: 100%;
 }
 #menu ul li a{
     text-align: center;
@@ -24,6 +25,7 @@
 
 .banner{
     height: 50px;
+    width: 100%;
 }
 
 #home{
