@@ -1,5 +1,5 @@
 html{
-    background-image: url("http://24.media.tumblr.com/8f213cdd84ea045e2bb00d88437efe14/tumblr_mx7f3dxnyf1rybxnmo1_500.jpg") no-repeat fixed;
+    background: transparent url("http://24.media.tumblr.com/8f213cdd84ea045e2bb00d88437efe14/tumblr_mx7f3dxnyf1rybxnmo1_500.jpg") 0 0 no-repeat fixed;
 }
 
 #sitelogo{
