@@ -81,6 +81,7 @@ html{
 }
 
 #login {
+    text-align: left;
     width: 20%;
     margin-right: 2.5%;
 }
