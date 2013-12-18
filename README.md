@@ -7,7 +7,19 @@ Everything here is up for discussion
 
 The main focus is **UX**. Has to be very **easy to use**. but of course functionality is important too
 
-* a *post* is an instance of someone selling some book; each *post* has a seller's info, the book being sold, the condition of the book, date submitted, and the price(s)
+* a *post* is an instance of someone selling some book; 
+  * In the database, the following should be **stored**:
+    * something to link it to the seller
+    * the book being sold
+    * the condition of the book
+    * the price wanted
+    * the date the post was submitted
+  * On a book's page, each post should **show**
+    * the condition
+    * date submitted
+    * price info
+    * way of contacting seller
+   
 * Home page
   * if user is **not** logged in, show a login panel, some text describing thebookexchange, and perhaps a carousel with the most recent *posts*
   * if user is logged in, show a list of their pending *posts*, i.e. books they are trying to sell, and some panel relating to the books they are *subscribed* to(refer to TODO)
