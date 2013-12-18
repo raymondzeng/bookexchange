@@ -54,3 +54,7 @@ The main focus is **UX**. Has to be very **easy to use**. but of course function
   * users can 'follow' a book so they get an email everytime someone submits a *post* selling that book
 
 * Get all the books that Brown Courses use so we have a good set of books to begin with 
+
+### Last Features
+* Ability for seller's to take picture of barcode/isbn instead of typing
+  * in a way that its easy to take pictures of many books at one time
