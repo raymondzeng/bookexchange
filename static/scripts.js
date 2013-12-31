@@ -1,7 +1,11 @@
 $(document).ready(function(){
     $("#search-a").click(function(){
-	$("#searchbar").slideToggle();
-	$("#searchbar input").focus();
+	if($("#searchbar").css('display') == 'none'){
+	    $("#searchbar").slideToggle();
+	    $("#searchbar input").focus();
+	}
+	else
+	    $("#searchbar").slideToggle();
     });
     $("#as-button").click(function(){
 	$("#advancedsearch").slideToggle();
