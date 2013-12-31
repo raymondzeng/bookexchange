@@ -90,7 +90,7 @@ html{
     margin-bottom: -10px;
     width: 100%;
 }
-#login-email, #login-password, #register-displayname, #register-email, #register-password, #register-reenter{
+#login-email, #login-password, #register-email, #register-password, #register-reenter{
     width: 100%;
     height: 40px;
 }
