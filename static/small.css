@@ -1,6 +1,5 @@
 html, body{
     text-align: left;
-    background: black;
 }
 #sitelogo{
     font-size: 20px;
@@ -27,19 +26,6 @@ html, body{
     width: 100%
 }
 
-.banner{
-    height: 50px;
-    width: 100%;
-}
-
-#home{
-    margin: 0px;
-    width: 100%;
-}
-
-#login{
+#login, #register{
     width: 90%;
-}
-#welcome{
-    display: none;
 }
