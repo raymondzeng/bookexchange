@@ -1,3 +1,7 @@
+html, body{
+    text-align: left;
+    background: black;
+}
 #sitelogo{
     font-size: 20px;
 }
