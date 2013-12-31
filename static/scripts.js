@@ -5,6 +5,7 @@ $(document).ready(function(){
     });
     $("#as-button").click(function(){
 	$("#advancedsearch").slideToggle();
+	$("#searchbar input").focusout();
     });
     $("#as-cancel").click(function(){
 	$("#advancedsearch").slideToggle();
