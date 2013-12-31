@@ -26,6 +26,9 @@ html, body{
     width: 100%
 }
 
+#logged-out{
+    margin-top: 0px;
+}
 #login, #register{
     width: 90%;
 }
