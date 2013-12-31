@@ -11,7 +11,6 @@ html{
 :-ms-input-placeholder{
     font-style: italic;
 }
-
 #top-page{
     width: 100%;
     border-bottom: 1px solid black;
@@ -63,11 +62,17 @@ html{
 #advancedsearch label{
     color: white;
 }
+
 #logged-out{
     text-align: center;
-    margin-top: 250px;
+    margin-top: 125px;
 }
-#login {
+
+#login, #register{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    display: block;
     background: white;
     padding: 10px;
     border: 1px solid black;
@@ -77,16 +82,18 @@ html{
 #login button{
     margin-top: 10px;
     margin-bottom: -10px;
+    width: 50%;
 }
-#login-email, #login-password{
+
+#register button{
+    margin-top: 10px;
+    margin-bottom: -10px;
+    width: 100%;
+}
+#login-email, #login-password, #register-displayname, #register-email, #register-password, #register-reenter{
     width: 100%;
     height: 40px;
 }
 #login-submit{
     margin-right: 10px;
-}
-#welcome {
-    width: 70%;
-    text-align: center;
-    font-size: 35px;
 }
