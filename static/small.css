@@ -27,7 +27,7 @@ html, body{
 }
 
 #logged-out{
-    margin-top: 0px;
+    margin-top: 10px;
 }
 #login, #register{
     width: 90%;
