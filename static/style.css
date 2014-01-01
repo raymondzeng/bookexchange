@@ -79,7 +79,7 @@ html{
     border-radius: 5px;
     width: 300px;
 }
-#login button, #registration button{
+#login button{
     margin-top: 10px;
     margin-bottom: -10px;
     width: 50%;
@@ -89,6 +89,13 @@ html{
     margin-top: 10px;
     margin-bottom: -10px;
     width: 100%;
+}
+
+#registration button{
+    float: left;
+    margin-top: 10px;
+    margin-bottom: -10px;
+    width:50%;
 }
 #login-email, #login-password, #register-email, #register-password, #register-reenter{
     width: 100%;
