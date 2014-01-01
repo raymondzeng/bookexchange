@@ -29,6 +29,9 @@ html, body{
 #logged-out{
     margin-top: 10px;
 }
-#login, #register{
+#login, #register, #registration{
     width: 90%;
+}
+#registrate-email,#registrate-password,#registrate-reenter,#registrate-facebook,#registrate-phone{
+    width:100%;
 }
