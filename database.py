@@ -6,10 +6,10 @@ import urlparse
 urlparse.uses_netloc.append("postgres")
 
 # for deployment; make sure local and remote db are synced
-url = urlparse.urlparse(os.environ['DATABASE_URL'])
+#url = urlparse.urlparse(os.environ['DATABASE_URL'])
 
 # local testing
-#url = urlparse.urlparse('postgresql://localhost/localdb')
+url = urlparse.urlparse('postgresql://localhost/localdb')
 
 conn = psycopg2.connect(
     database=url.path[1:],

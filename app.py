@@ -13,9 +13,9 @@ def validate_email():
 
 @app.route("/register", methods= ['GET', 'POST'])
 def register():
-    e = request.args.get('e','')
-    p = request.args.get('p','')
-    add_user(e,p)
+    #e = request.args.get('e','')
+    #p = request.args.get('p','')
+    #add_user(e,p)
     return render_template('register.html')
 
 

@@ -14,9 +14,9 @@
   <body>
     <div id="top-page">
       <div class="pure-menu pure-menu-open pure-menu-horizontal" id="menu">
-	<a href="#" class="pure-menu-heading" id="sitelogo">The Book Exchange</a>
+	<a href="/" class="pure-menu-heading" id="sitelogo">The Book Exchange</a>
 	<ul>
-          <li class="pure-menu-selected"><a href="#">Home</a></li>
+          <li class="pure-menu-selected"><a href="/">Home</a></li>
           <li><a href="#" id="search-a">Search Books</a></li>
           <li><a href="#">Sell Books</a></li>
 	</ul>
@@ -77,13 +77,13 @@
       </div>
       
       <div id="register">
-	<form class="pure-form pure-form-stacked">
+	<form class="pure-form pure-form-stacked" method="post" action="/register">
 	  <fieldset>
 	    <legend><b>No Account?</b> Sign Up</legend>
 	    <input id="register-email" type="email" placeholder="Email">
 	    <input id="register-password" type="password" placeholder="Password">
 	    <input id="register-reenter" type="password" placeholder="Re-enter Password">
-	    <button id="register-submit" type="button" class="pure-button pure-button-secondary">Register</button>
+	    <button id="register-submit" type="submit" class="pure-button pure-button-secondary">Register</button>
 	  </fieldset>
 	</form>
       </div>
