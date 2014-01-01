@@ -1,0 +1,5 @@
+ id | username | password | name  
+----+----------+----------+-------
+  1 | admin    | admin    | Admin
+(1 row)
+

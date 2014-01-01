@@ -29,7 +29,7 @@ cur = conn.cursor()
 # Create new Table
 # change table_name and column_info accordingly
 new_table_name = 'users'
-column_info = '(id INT PRIMARY KEY, username VARCHAR(20), password VARCHAR(20), name VARCHAR(100))'
+column_info = '(email VARCHAR(100) PRIMARY KEY, password VARCHAR(20))'
 cur.execute("CREATE TABLE " + new_table_name + column_info)
 conn.commit()
 """

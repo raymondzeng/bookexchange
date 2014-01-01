@@ -2,9 +2,6 @@ import os
 import psycopg2
 import urlparse
 
-# Postgresql reference
-# http://zetcode.com/db/postgresqlpythontutorial/
-
 # Setup connection
 urlparse.uses_netloc.append("postgres")
 
@@ -24,16 +21,24 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 #--
+def email_in_use(email):
+    sql_string = "SELECT * FROM users WHERE email ='" + email + "'"
+    cur.execute(sql_string)
+    return not cur.fetchone() == None
 
-"""
-# Create new Table
-# change table_name and column_info accordingly
-new_table_name = 'users'
-column_info = '(id INT PRIMARY KEY, username VARCHAR(20), password VARCHAR(20), name VARCHAR(100))'
-cur.execute("CREATE TABLE " + new_table_name + column_info)
-conn.commit()
-"""
+# should never be passed an email in use, taken care of on frontend
+def add_user(email, password):
+    if email_in_use(email):
+        return "Email in use"
+    sql_string = "INSERT INTO users VALUES('"+email+"','"+password+"')"
+    cur.execute(sql_string)
+    conn.commit()
 
+def del_user(email):
+    sql_string = "DELETE FROM users WHERE email = '" + email + "'"
+    cur.execute(sql_string)
+    conn.commit()
+    
 """
 # Delete Table
 table_to_delete = "users"
@@ -47,12 +52,10 @@ cur.execute("INSERT INTO users VALUES(1,'admin','admin','Admin')")
 conn.commit()
 """
 
-
+"""
 # Get data
 cur.execute("SELECT * FROM users")
 rows = cur.fetchall()
 for row in rows:
     print row
-
-conn.close()
-    
+"""
