@@ -1,15 +1,22 @@
 $(document).ready(function(){
-    $("#search-a").click(function(){
-	if($("#searchbar").css('display') == 'none'){
-	    $("#searchbar").slideToggle();
-	    $("#searchbar input").focus();
-	}
-	else
-	    $("#searchbar").slideToggle();
+    $('#searchbar').focus(function(){
+	$('#searchbar').animate({
+	    width: "400px"
+	}, {
+	    duration: 500
+	});
+	$('#as-button').toggle();
+    });
+    $('#searchbar').blur(function(){
+	$('#searchbar').animate({
+	    width: "181px"
+	}, {
+	    duration: 500
+	});
+	$('#as-button').toggle();
     });
     $("#as-button").click(function(){
 	$("#advancedsearch").slideToggle();
-	$("#searchbar input").focusout();
     });
     $("#as-cancel").click(function(){
 	$("#advancedsearch").slideToggle();

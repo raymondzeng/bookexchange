@@ -14,40 +14,22 @@ html{
 #top-page{
     width: 100%;
     border-bottom: 1px solid black;
-    text-align: center;
 }
-
+#menu{
+    height: 35px;
+    padding: 5px;
+}
 #searchbar{
-    display: none;
-    background: #383838;
-    padding: 10px;
+    height: 30px;
 }
-
-#searchbar form input{
-    width: 30%;
-    position: center;
-    margin: auto;
+#as-button{
+    cursor: pointer;
 }
-
-#searchbar form a{
-    color: white;
-}
-
-#searchbar form a:hover{
-    color: #BBBBBB;
-}
-
-#searchbar form button{
-    margin-left: 5px;
-    margin-right: 20px;
-    text-align: center;
-}
-
 #advancedsearch{
     display: none;
     background: #383838;
-    margin-top: 10px;
     text-align: center;
+    padding: 10px;
 }
 #advancedsearch form fieldset button{
     margin-right: 0px;
