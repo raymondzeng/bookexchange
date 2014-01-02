@@ -1,9 +1,6 @@
 html, body{
     text-align: left;
 }
-#sitelogo{
-    font-size: 20px;
-}
 
 #menu{
     padding-bottom: 5px;
@@ -12,14 +9,6 @@ html, body{
 #menu ul li a{
     text-align: center;
     font-size: 15px;
-}
-
-#searchbar form input{
-    width: 100%;
-}
-
-#searchbar form button{
-    text-align: center;
 }
 
 #advancedsearch form fieldset input{
