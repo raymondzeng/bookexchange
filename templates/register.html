@@ -1,73 +1,37 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>The Book Exchange - Register</title>  
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
-    <link rel="stylesheet" href="/static/style.css" type="text/css"/>
-    <link rel="stylesheet" href="/static/small.css" type="text/css" media="only screen and (max-device-width: 780px)"/>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/scripts.js"></script>
-  </head>
-  <body>
-    
-    <div id="top-page">
-      <div class="pure-menu pure-menu-open pure-menu-horizontal" id="menu">
-	<a href="/" class="pure-menu-heading" id="sitelogo">The Book Exchange</a>
-	<ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="#">Sell Books</a></li>
-	  <li><form class="pure-form"><input id="searchbar" type="text" placeholder="Search for a book"></form></li>
-	  <li><a id="as-button">Advanced Search</a></li>
-	</ul>
-      </div>
-      
-      <div id="advancedsearch">
-	<form class="pure-form pure-form-aligned">
-	  <fieldset>
-            <div class="pure-control-group">
-	      <label for="as-ISBN">ISBN</label>
-	      <input id="as-ISBN" type="text" placeholder="978-0691153100">
-            </div>
-	    
-            <div class="pure-control-group">
-	      <label for="as-title">Title</label>
-	      <input id="as-title" type="text" placeholder="All Things Considered">
-            </div>
-	    
-            <div class="pure-control-group">
-	      <label for="as-author">Author</label>
-	      <input id="as-author" type="text" placeholder="Chih-p'ing Chou">
-            </div>
-	    
-	    <div class="pure-control-group">
-	      <label for="as-class">Class Code</label>
-	      <input id="as-class" type="text" placeholder="CHIN500">
-            </div>
-            <button type="submit" class="pure-button pure-button-primary">Submit</button>
-	    <button class="pure-button" id="as-cancel">Cancel</button>
-	  </fieldset>
-	</form>
-      </div>
-    </div>
+<!-- extend from base layout -->
+{% extends "base.html" %}
 
-    <div id="registration">
-      <form class="pure-form pure-form-stacked" method="post" action="/register">
-	<fieldset>
-	  <legend><b>Required</b></legend>
-	  <input id="registrate-email" type="email" placeholder="Email">
-	  <input id="registrate-password" type="password" placeholder="Password">
-	  <input id="registrate-reenter" type="password" placeholder="Re-enter Password">
-	  <legend><b>Optional</b> Contact Info (Can be changed later)</legend>
-	  <p>Provides an alternative way (default is email) for buyers to contact you. When you sell a book, you will be able to choose what contact info is displayed. 
-	  <input id="registrate-facebook" type="url" placeholder="Facebook">
-	  <input id="registrate-phone" type="tel" placeholder="Phone Number">
-	  <button id="registrate-submit" type="submit" class="pure-button pure-button-primary">Sign Up</button>
-	</fieldset>
-      </form>
-    </div>
+{% block content %}
+<h1>{{ title }}</h1>
+<form action="" method="post" name="register">
+    {{register_form.hidden_tag()}}
+    <p>
+      Email:<br>
+      {{ register_form.email(size=80) }}<br>
+      {% for error in register_form.errors.email %}
+      <span style="color: red;">{{error}}</span>
+      {% endfor %}<br>
 
-  </body>
-</html>
+      Password:<br>
+      {{ register_form.password(size=80) }}<br>
+      {% for error in register_form.errors.password %}
+      <span style="color: red;">{{error}}</span>
+      {% endfor %}<br>
+
+      Confirm Password:<br>
+      {{ register_form.confirm(size=80) }}<br>
+      {% for error in register_form.errors.confirm %}
+      <span style="color:red;">{{ error }}</span>
+      {% endfor %}<br>
+
+      <br>
+      Optional: <br>
+      Facebook URL (as an alternative means for buyers to contact you: <br>
+      {{ register_form.fb_url(size=80) }} <br>
+      {% for error in register_form.errors.fb_url %}
+      <span style="color: red;">{{ error }}</span>
+      {% endfor %}
+    </p>
+    <p><input type="submit" value="Register"></p>
+</form>
+{% endblock %}
