@@ -1,9 +1,7 @@
-import app
 from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField
 from wtforms.validators import Required, Length, EqualTo
 
-db = app.db
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
