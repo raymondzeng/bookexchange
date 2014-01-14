@@ -1,3 +1,4 @@
+from app import db 
 from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField
 from wtforms.validators import Required, Length, EqualTo
