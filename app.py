@@ -6,8 +6,8 @@ from models import *
 
 app = Flask(__name__)
 app.config.from_object('config')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/localdb'  
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/localdb'  
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
 
 
 db = SQLAlchemy(app)

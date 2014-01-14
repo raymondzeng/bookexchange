@@ -1,15 +1,15 @@
-from app import db 
+import app
 from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField
 from wtforms.validators import Required, Length, EqualTo
 
-class User(db.Model):
+class User(app.db.Model):
 
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120))
-    fb_url = db.Column(db.Text, default=None)
-    posts = db.relationship('Post', backref='seller', lazy='dynamic')
+    id = app.db.Column(app.db.Integer, primary_key=True)
+    email = app.db.Column(app.db.String(120), unique=True)
+    password = app.db.Column(app.db.String(120))
+    fb_url = app.db.Column(app.db.Text, default=None)
+    posts = app.db.relationship('Post', backref='seller', lazy='dynamic')
 
     def is_authenticated(self):
         return True
@@ -26,21 +26,21 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % (self.email)
 
-class Book(db.Model):
-    isbn = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(140))
-    author = db.Column(db.String(140))
-    amason_url = db.Column(db.Text)
-    classes = db.Column(db.String(20))
-    posts = db.relationship('Post', backref='book', lazy='dynamic')
+class Book(app.db.Model):
+    isbn = app.db.Column(app.db.Integer, primary_key=True)
+    title = app.db.Column(app.db.String(140))
+    author = app.db.Column(app.db.String(140))
+    amason_url = app.db.Column(app.db.Text)
+    classes = app.db.Column(app.db.String(20))
+    posts = app.db.relationship('Post', backref='book', lazy='dynamic')
 
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Integer, db.ForeignKey('user.id'))
-    timestamp = db.Column(db.DateTime)
-    book_isbn = db.Column(db.Integer, db.ForeignKey('book.isbn'))
-    price = db.Column(db.Integer)
-    condition = db.Column(db.Integer)
+class Post(app.db.Model):
+    id = app.db.Column(app.db.Integer, primary_key=True)
+    uid = app.db.Column(app.db.Integer, app.db.ForeignKey('user.id'))
+    timestamp = app.db.Column(app.db.DateTime)
+    book_isbn = app.db.Column(app.db.Integer, app.db.ForeignKey('book.isbn'))
+    price = app.db.Column(app.db.Integer)
+    condition = app.db.Column(app.db.Integer)
     
 class LoginForm(Form):
     email = TextField('email', validators = [Required()])
