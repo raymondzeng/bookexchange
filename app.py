@@ -6,6 +6,18 @@ from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField
 from wtforms.validators import Required, Length, EqualTo
 
+
+app = Flask(__name__)
+app.config.from_object('config')
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/localdb'  
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
+
+
+db = SQLAlchemy(app)
+lm = LoginManager()
+lm.init_app(app)
+lm.login_view = '/'
+
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -94,17 +106,6 @@ class RegisterForm(Form):
             return False
 
         return True
-
-app = Flask(__name__)
-app.config.from_object('config')
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/localdb'  
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
-
-
-db = SQLAlchemy(app)
-lm = LoginManager()
-lm.init_app(app)
-lm.login_view = '/'
 
 @lm.user_loader
 def load_user(user_id):
