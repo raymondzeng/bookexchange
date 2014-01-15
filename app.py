@@ -42,18 +42,19 @@ class User(db.Model):
         return '<User %r>' % (self.email)
 
 class Book(db.Model):
-    isbn = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(140))
-    author = db.Column(db.String(140))
-    amason_url = db.Column(db.Text)
-    classes = db.Column(db.String(20))
+    isbn = db.Column(db.BigInteger, primary_key=True, unique=True)
+    title = db.Column(db.Text)
+    author = db.Column(db.Text)
+    amazon_url = db.Column(db.Text)
+    image = db.Column(db.Text)
+    courses = db.Column(db.String(140))
     posts = db.relationship('Post', backref='book', lazy='dynamic')
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime)
-    book_isbn = db.Column(db.Integer, db.ForeignKey('book.isbn'))
+    book_isbn = db.Column(db.BigInteger, db.ForeignKey('book.isbn'))
     price = db.Column(db.Integer)
     condition = db.Column(db.Integer)
     
@@ -157,6 +158,14 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+@app.route('/book/<isbn>')
+def get_book(isbn):
+    b = Book.query.filter_by(courses=isbn).first()
+    if b is None:
+        return 'invalid isbn'
+    return "%s<br>%s<br>%s<br>%s<br><a href='%s'>amazon</a><br><a href='%s'>image</a>"%(b.isbn,b.title,b.author,b.courses,b.amazon_url,b.image)
 
 if __name__ == '__main__':
     app.run(debug = True, host='0.0.0.0', port=5000)

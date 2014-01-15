@@ -1,61 +1,60 @@
-import os
-import psycopg2
-import urlparse
+from app import db, Book
+import pickle
+from amazon import get_amazon_info, get_amazon_image, get_chegg_info
+import time
 
-# Setup connection
-urlparse.uses_netloc.append("postgres")
+def add_book(isbn, course, amz_info, amz_image):
+    # on the rare occasion amazon doesn't have a book
+    if isinstance(amz_info, basestring):
+        amz_info = get_chegg_info(isbn)
+        print 'chegged'
+    # if chegg also doesn't have it, have to manually fill
+    if isinstance(amz_info, basestring):
+        amz_info = {'url': None,
+                    'title': None,
+                    'authors': [None]}
+        print 'not in chegg either'
+    authors = amz_info['authors']
+    author = ""
+    if authors is not None and authors != []:
+        if authors[0] is not None:
+            for a in authors:
+                author = author + "," + a
 
-# for deployment; make sure local and remote db are synced
-#url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    b = Book(isbn=isbn, 
+             title=amz_info['title'],
+             author=author,
+             amazon_url=amz_info['url'],
+             image=amz_image,
+             courses=course)
+    db.session.add(b)
+    db.session.commit()
 
-# local testing
-url = urlparse.urlparse('postgresql://localhost/localdb')
+isbns = pickle.load(open('isbn.p','rb'))
 
-conn = psycopg2.connect(
-    database=url.path[1:],
-    user=url.username,
-    password=url.password,
-    host=url.hostname,
-    port=url.port
-)
+# a list of tuples of only courses that have books
+c = []
+for course in isbns:
+    if course['isbns'] != []:
+        c.append(course)
 
-cur = conn.cursor()
-#--
-def email_in_use(email):
-    sql_string = "SELECT * FROM users WHERE email ='" + email + "'"
-    cur.execute(sql_string)
-    return not cur.fetchone() == None
+# remove all invalid isbns; I believe the invalid ones are brown bookstore lab packets etc.
+clean = []
+for course in c:
+    i = []
+    for isbn in course['isbns']:
+        if isbn.isdigit():
+            i.append(isbn)
+    clean.append({'id': course['id'], 'isbns': i})
 
-# should never be passed an email in use, taken care of on frontend
-def add_user(email, password):
-    if email_in_use(email):
-        return "Email in use"
-    sql_string = "INSERT INTO users VALUES('"+email+"','"+password+"')"
-    cur.execute(sql_string)
-    conn.commit()
-
-def del_user(email):
-    sql_string = "DELETE FROM users WHERE email = '" + email + "'"
-    cur.execute(sql_string)
-    conn.commit()
-    
-"""
-# Delete Table
-table_to_delete = "users"
-cur.execute("DROP TABLE IF EXISTS " + table_to_delete)
-conn.commit()
-"""
-
-"""
-# Insert Row
-cur.execute("INSERT INTO users VALUES(1,'admin','admin','Admin')")
-conn.commit()
-"""
-
-"""
-# Get data
-cur.execute("SELECT * FROM users")
-rows = cur.fetchall()
-for row in rows:
-    print row
-"""
+for course in clean:
+    for isbn in course['isbns']:
+        exists = Book.query.filter_by(isbn=isbn).first()
+        if exists != None:
+            print isbn
+        else:
+            info = get_amazon_info(isbn)
+            img = get_amazon_image(isbn)
+            add_book(int(isbn), course['id'], info, img)
+            print 'added: ' + isbn
+            time.sleep(2)
