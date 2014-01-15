@@ -7,29 +7,28 @@ import bottlenose
 
 amazon = bottlenose.Amazon("AKIAJU37EOGXIYUI4HMA","Dh3ngz4QHf5xKw2tQFj+/LJhJEuExsF1hmt9qZAL","1")
 
-# ItemId is the ISBN
+# ItemId is the ISBN, can be both ISBN10 and ISBN13
 # response is in XML
-response = amazon.ItemLookup(ItemId="0691153108", ResponseGroup="ItemAttributes", SearchIndex="Books",IdType="ISBN")
 
-soup = BeautifulSoup(response)
+def get_amazon_info(isbn):
+    response = amazon.ItemLookup(ItemId= str(isbn), ResponseGroup="ItemAttributes", SearchIndex="Books",IdType="ISBN")
+    soup = BeautifulSoup(response)
+    error = soup.message
+    if error is None:
+        info = {'url': soup.detailpageurl.string,
+                'title': soup.title.string, 
+                'authors': map(lambda x: x.get_text(), soup.find_all("author"))}
+        return info
+    else:
+        return error.string
 
-# prints the xml in a readable format
-# print(soup.prettify())
+def get_amazon_image(isbn):
+    response = amazon.ItemLookup(ItemId= str(isbn), ResponseGroup="Images", SearchIndex="Books",IdType="ISBN")
+    soup = BeautifulSoup(response)
+    error = soup.message
+    if error is None:
+        return soup.largeimage.url.string
+    else:
+        return error.string
 
-# gets the url on amazon where the book is located
-url = soup.detailpageurl.string
-
-# the title that corresponds to the ISBN
-title = soup.title.string
-
-# a list of string of the authors of the book
-authors = map(lambda x: x.get_text(), soup.find_all("author"))
-
-
-print url 
-print
-print title
-print
-print authors
-
-# the response has a bunch of other data that we probably don't need but feel free to print out the prettified xml and look at it
+#print get_amazon_info('9780691153100')
