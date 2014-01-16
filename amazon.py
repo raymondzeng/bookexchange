@@ -5,6 +5,7 @@
 from bs4 import BeautifulSoup
 import bottlenose
 import urllib2
+from decimal import Decimal
 
 amazon = bottlenose.Amazon("AKIAJU37EOGXIYUI4HMA","Dh3ngz4QHf5xKw2tQFj+/LJhJEuExsF1hmt9qZAL","1")
 
@@ -22,6 +23,15 @@ def get_amazon_info(isbn):
         return info
     else:
         return error.string
+
+def get_amazon_price(isbn):
+    response = amazon.ItemLookup(ItemId= str(isbn), ResponseGroup="ItemAttributes", SearchIndex="Books",IdType="ISBN")
+    soup = BeautifulSoup(response)
+    price = soup.formattedprice
+    if price is not None:
+        return Decimal(soup.formattedprice.string[1:])
+    else:
+        return None
 
 def get_amazon_image(isbn):
     response = amazon.ItemLookup(ItemId= str(isbn), ResponseGroup="Images", SearchIndex="Books",IdType="ISBN")

@@ -1,6 +1,6 @@
 from app import db, Book
 import pickle
-from amazon import get_amazon_info, get_amazon_image, get_chegg_info
+from amazon import get_amazon_info, get_amazon_image, get_chegg_info, get_amazon_price
 import time
 
 def add_book(isbn, course, amz_info, amz_image):
@@ -47,6 +47,8 @@ for course in c:
             i.append(isbn)
     clean.append({'id': course['id'], 'isbns': list(set(i))})
 
+# populate database
+"""
 while True:
     try:
         for course in clean:
@@ -67,6 +69,24 @@ while True:
                     add_book(int(isbn), course['id'], info, img)
                     print 'added: ' + isbn
                     time.sleep(1)
+    except:
+        print "restarting"
+        continue
+    break
+
+"""
+
+# add price values
+books = Book.query.filter(Book.amazon_url != None)
+
+while True:
+    try:
+        for book in books:
+            if book.amazon_price is None:
+                book.amazon_price = get_amazon_price(book.isbn)
+                time.sleep(1)
+                db.session.commit()
+                print book.amazon_price
     except:
         print "restarting"
         continue

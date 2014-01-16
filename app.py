@@ -10,8 +10,8 @@ from wtforms.validators import Required, Length, EqualTo, Email
 
 app = Flask(__name__)
 app.config.from_object('config')
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/localdb'  
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/localdb'  
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
 
 
 db = SQLAlchemy(app)
@@ -49,6 +49,7 @@ class Book(db.Model):
     amazon_url = db.Column(db.Text)
     image = db.Column(db.Text)
     courses = db.Column(ARRAY(db.String(140)))
+    amazon_price = db.Column(db.Numeric)
     posts = db.relationship('Post', backref='book', lazy='dynamic')
 
 
@@ -57,7 +58,7 @@ class Post(db.Model):
     uid = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime)
     book_isbn = db.Column(db.BigInteger, db.ForeignKey('book.isbn'))
-    price = db.Column(db.Integer)
+    price = db.Column(db.Numeric)
     condition = db.Column(db.Integer)
     
 
