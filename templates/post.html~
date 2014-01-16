@@ -1,0 +1,31 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Sell</h1>
+<form action="" method="post" name="post">
+    {{post_form.hidden_tag()}}
+    <p>
+      ISBN:<br>
+      {{ post_form.isbn(size=80) }}<br>
+      {% for error in post_form.errors.isbn %}
+      <span style="color: red;">{{error}}</span>
+      {% endfor %}<br>
+
+      Price:<br>
+      {{ post_form.price(size=80) }}<br>
+      {% for error in post_form.errors.price %}
+      <span style="color: red;">{{error}}</span>
+      {% endfor %}<br>
+
+      Condition:<br>
+      {{ post_form.condition }}<a href="http://www.amazon.com/gp/help/customer/display.html?nodeId=1161242#books" target="_blank">Guidelines</a><br>
+      {% for error in post_form.errors.condition %}
+      <span style="color: red;">{{ error }}</span>
+      {% endfor %}
+    </p>
+    <p><input type="submit" name="btn" value="Sell">
+</form>
+
+<div id="book info"></div>
+{% endblock %}

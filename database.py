@@ -8,25 +8,25 @@ def add_book(isbn, course, amz_info, amz_image):
     if isinstance(amz_info, basestring):
         amz_info = get_chegg_info(isbn)
         print 'chegged'
-    # if chegg also doesn't have it, have to manually fill
+
+    # if chegg also doesn't have it, have to manually update
     if isinstance(amz_info, basestring):
         amz_info = {'url': None,
                     'title': None,
-                    'authors': [None]}
+                    'authors': None}
         print 'not in chegg either'
+
     authors = amz_info['authors']
-    author = ""
-    if authors is not None and authors != []:
-        if authors[0] is not None:
-            for a in authors:
-                author = author + "," + a
+
+    if authors is not None:
+        authors = list(set(authors))
 
     b = Book(isbn=isbn, 
              title=amz_info['title'],
-             author=author,
+             author=authors,
              amazon_url=amz_info['url'],
              image=amz_image,
-             courses=course)
+             courses=[course])
     db.session.add(b)
     db.session.commit()
 
@@ -45,16 +45,30 @@ for course in c:
     for isbn in course['isbns']:
         if isbn.isdigit():
             i.append(isbn)
-    clean.append({'id': course['id'], 'isbns': i})
+    clean.append({'id': course['id'], 'isbns': list(set(i))})
 
-for course in clean:
-    for isbn in course['isbns']:
-        exists = Book.query.filter_by(isbn=isbn).first()
-        if exists != None:
-            print isbn
-        else:
-            info = get_amazon_info(isbn)
-            img = get_amazon_image(isbn)
-            add_book(int(isbn), course['id'], info, img)
-            print 'added: ' + isbn
-            time.sleep(2)
+while True:
+    try:
+        for course in clean:
+            for isbn in course['isbns']:
+                exists = Book.query.get(int(isbn))
+                if exists != None:
+                    if course['id'] not in exists.courses:
+                        temp = list(exists.courses)
+                        temp.append(course['id'])
+                        exists.courses = temp
+                        db.session.commit()
+                        print course['id'] + " " + str(isbn)
+                    print '%s exists'%(isbn)
+                else:
+                    info = get_amazon_info(isbn)
+                    time.sleep(1)
+                    img = get_amazon_image(isbn)
+                    add_book(int(isbn), course['id'], info, img)
+                    print 'added: ' + isbn
+                    time.sleep(1)
+    except:
+        print "restarting"
+        continue
+    break
+

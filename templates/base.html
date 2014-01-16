@@ -7,7 +7,12 @@
     {% endif %}
   </head>
   <body>
-    <div>BookExchange</div>
+    <div style="display:inline;">BookExchange
+    {% if user_email %}
+    {{ user_email }}
+      <a href='/logout'>Logout</a>
+    {% endif %}
+    </div>
     <hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -19,5 +24,6 @@
     {% endif %}
     {% endwith %}
     {% block content %}{% endblock %}
+    
   </body>
 </html>
