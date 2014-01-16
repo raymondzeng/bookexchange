@@ -1,0 +1,26 @@
+#wrapper {
+    width: 600px;
+    margin-left: 35%;
+    margin-top: 150px;
+}
+#login{
+    width: 410px;
+    float: left;
+}
+
+#login .form-control {
+    margin-left: 10px;
+    width: 300px;
+}
+
+#errors {
+    width: 190px;
+    float:right;
+}
+
+#email-error, #pass-error{
+    padding-top: 20px;
+    color: red;
+    margin-left: 20px;
+    height: 50px;
+}

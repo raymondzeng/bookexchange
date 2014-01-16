@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, g
+from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required, user_logged_in
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -20,7 +20,6 @@ lm.init_app(app)
 lm.login_view = '/login'
 
 class User(db.Model):
-
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
@@ -95,19 +94,12 @@ class RegisterForm(Form):
         EqualTo('password', message='Passwords must match')])
     fb_url = TextField('facebook')
 
-    def validate(self):
-        rv = Form.validate(self)
-        if not rv:
-            return False
-
+    def validate_email(form, field):
         user = User.query.filter_by(
-            email=self.email.data).first()
+            email=field.data).first()
         
         if user is not None:
-            self.email.errors.append('Email already in use')
-            return False
-
-        return True
+            raise ValidationError('Email already in use')
 
 
 class PostForm(Form):
@@ -124,7 +116,7 @@ class PostForm(Form):
         if len(field.data) != 10 and len(field.data) != 13:
             raise ValidationError('ISBN must be 10 or 13 digits')
 
-    
+            
 @lm.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -132,21 +124,17 @@ def load_user(user_id):
 @app.route('/', methods=['GET','POST'])
 def index():
     if not current_user.is_authenticated():
-        form = LoginForm()
-        if form.validate_on_submit():
-            remember_me = form.remember_me.data
-            login_user(form.user,remember=remember_me)
-            return redirect(url_for('index'))
-        return render_template('login.html',
-                               title = 'Welcome',
-                               login_form = form)
+        return render_template('home_logged_out.html')
+    return render_template('base.html')
 
+@app.route('/sell' , methods=['GET', 'POST'])
+def sell():
     form = PostForm()
     if form.validate_on_submit():
         flash('post received')
         return redirect(url_for('index'))
     return render_template('post.html',
-                        title = 'Home',
+                        title = 'Sell Books',
                         user_email = current_user.email,
                         post_form = form)
     
@@ -159,6 +147,7 @@ def login():
     if form.validate_on_submit():
         remember_me = form.remember_me.data
         login_user(form.user,remember=remember_me)
+        session['logged_in'] = True
         return redirect(url_for('index'))
         
     return render_template('login.html', 
@@ -193,6 +182,7 @@ def register():
 @login_required
 def logout():
     logout_user()
+    session['logged_in'] = False
     return redirect(url_for('index'))
 
 

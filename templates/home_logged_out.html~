@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form id="big-search" role="search">
+  <div class="input-group">
+    <input type="text" class="form-control input-lg" placeholder="Enter an ISBN, title, author, or course number">
+    <span class="input-group-btn">
+      <button class="btn btn-default btn-warning" type="button">Search</button>
+    </span>
+  </div>
+</form>

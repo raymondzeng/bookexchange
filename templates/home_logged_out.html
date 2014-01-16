@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block sheets %}
+<link href="/static/index.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div id="big-search" class="input-group input-group-lg">
+    <input type="text" class="form-control" placeholder="Enter an ISBN, title, author, or course number">
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="button">Search</button>
+    </span>
+</div>
+
+{% endblock %}

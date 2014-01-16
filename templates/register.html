@@ -1,37 +1,63 @@
 <!-- extend from base layout -->
 {% extends "base.html" %}
 
+{% block sheets %}
+<link href="/static/register.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<h1>{{ title }}</h1>
-<form action="" method="post" name="register">
-    {{register_form.hidden_tag()}}
-    <p>
-      Email:<br>
-      {{ register_form.email(size=80) }}<br>
-      {% for error in register_form.errors.email %}
-      <span style="color: red;">{{error}}</span>
-      {% endfor %}<br>
-
-      Password:<br>
-      {{ register_form.password(size=80) }}<br>
-      {% for error in register_form.errors.password %}
-      <span style="color: red;">{{error}}</span>
-      {% endfor %}<br>
-
-      Confirm Password:<br>
-      {{ register_form.confirm(size=80) }}<br>
-      {% for error in register_form.errors.confirm %}
-      <span style="color:red;">{{ error }}</span>
-      {% endfor %}<br>
-
-      <br>
-      Optional: <br>
-      Facebook URL (as an alternative means for buyers to contact you: <br>
-      {{ register_form.fb_url(size=80) }} <br>
-      {% for error in register_form.errors.fb_url %}
-      <span style="color: red;">{{ error }}</span>
-      {% endfor %}
-    </p>
-    <p><input type="submit" value="Register"></p>
-</form>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Register</h3>
+  </div>
+  <div class="panel-body">
+    <form action="" method="post" name="register">
+      {{register_form.hidden_tag()}}
+      <div class="form-group">
+	<label for="email">
+	  Email
+	  {% for error in register_form.errors.email %}
+	  <span>{{error}}</span>
+	  {% endfor %}
+	</label>
+	{{ register_form.email(class_='form-control') }}
+	<span class="help-block">The default method for buyers to contact you</span>
+      </div>
+      <div class="form-group">
+	<label for="password">
+	  Password
+	  {% for error in register_form.errors.password %}
+	  <span>{{error}}</span>
+	  {% endfor %}
+	</label>
+	{{ register_form.password(class_='form-control') }}
+      </div>
+      
+      <div class="form-group">
+	<label for="confirm">
+	  Confirm Password 
+	  {% for error in register_form.errors.confirm %}
+	  <span>{{ error }}</span>
+	  {% endfor %}
+	</label>
+	{{ register_form.confirm(class_='form-control') }}
+      </div>
+      
+      <div class="page-header">
+	<h4>Optional  <small>Alternative way(s) to be contacted</small></h4>
+      </div>
+      
+      <div class="form-group">
+	<label for="fb_url">
+	  Facebook URL
+	  {% for error in register_form.errors.fb_url %}
+	  <span>{{ error }}</span>
+	  {% endfor %}
+	</label>
+	{{ register_form.fb_url(class_='form-control') }}
+      </div>
+      <input class="btn btn-success" type="submit" value="Register">
+    </form>
+  </div>
+</div>
 {% endblock %}
