@@ -1,0 +1,37 @@
+# add tsvector column
+ALTER TABLE book 
+ADD COLUMN tsv TSVECTOR;
+
+# update tsv value for each row
+# to_tsvector only accepts strings
+# setweight: assign importance from A -> D
+# coalesce takes care of Null values
+UPDATE book SET tsv =
+       setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    ||
+       setweight(to_tsvector(coalesce(title,'')), 'B')  ||
+       setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') ||
+       setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B');
+
+# index the tsv column
+CREATE INDEX search_idx ON book USING gin(tsv);
+
+# create a trigger that updates the tsv on insert and update
+# first create a trigger function using the Pl/Pgsql language
+CREATE FUNCTION book_trigger() RETURNS trigger AS $$                  
+begin	
+    new.search_tsvector :=  
+        setweight(to_tsvector('pg_catalog.english', coalesce(isbn::text,'')), 'A')    ||   
+	setweight(to_tsvector('pg_catalog.english', coalesce(title,'')), 'B')  ||
+	setweight(to_tsvector('pg_catalog.english', coalesce(array_to_string(author,', '),'')), 'B') ||
+	setweight(to_tsvector('pg_catalog.english', coalesce(array_to_string(courses,', '),'')), 'B');	 
+     return new;                                                 
+end                                                                      
+$$ language plpgsql;
+
+# next create the trigger
+CREATE TRIGGER tsvupdate BEFORE INSERT OR UPDATE ON BOOK
+FOR EACH ROW EXECUTE PROCEDURE book_trigger();
+
+
+# querying
+SELECT title FROM book WHERE tsv @@ plainto_tsquery('thomas calculus');

@@ -59,3 +59,4 @@ def get_chegg_info(isbn):
             'title': title,
             'authors': [author]}
     return info
+
