@@ -1,0 +1,22 @@
+#filter {
+    float: left;
+    width: 300px;
+    text-align: center;
+    position: fixed;
+}
+#results-cont {
+    margin-left: 300px;
+    border-left: .75px 
+}
+
+.image-td {
+    width: 130px;
+    height: 175px;
+}
+.text-td {
+    height: 175px;
+}
+
+.text-td p{
+    margin: 1px;
+}

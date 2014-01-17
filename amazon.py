@@ -2,12 +2,15 @@
 # for exmaple, my chinese textbook's ISBN is 0691153108
 # and below is the code to find it's amazon url, title, and authors
 
+import os
 from bs4 import BeautifulSoup
 import bottlenose
 import urllib2
 from decimal import Decimal
+s3_key = os.environ['S3_KEY']
+s3_secret = os.environ['S3_SECRET']
 
-amazon = bottlenose.Amazon("AKIAJU37EOGXIYUI4HMA","Dh3ngz4QHf5xKw2tQFj+/LJhJEuExsF1hmt9qZAL","1")
+amazon = bottlenose.Amazon(s3_key,s3_secret,"1")
 
 # ItemId is the ISBN, can be both ISBN10 and ISBN13
 # response is in XML
@@ -60,3 +63,4 @@ def get_chegg_info(isbn):
             'authors': [author]}
     return info
 
+print get_amazon_info(9781429231091)

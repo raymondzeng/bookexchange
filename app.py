@@ -1,4 +1,4 @@
-import os
+import os, json
 from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required, user_logged_in
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -7,10 +7,10 @@ from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, SelectField, ValidationError
 from wtforms.validators import Required, Length, EqualTo, Email
 
+from amazon import get_amazon_info
 
 app = Flask(__name__)
 app.config.from_object('config')
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/localdb'  
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
 
 
@@ -59,7 +59,7 @@ class Book(db.Model):
                 'amazon_url': self.amazon_url,
                 'image': self.image,
                 'courses': self.courses,
-                'amazon_price': float(self.amazon_price)}
+                'post_count': self.posts.count()}
 
 
 class Post(db.Model):
@@ -200,7 +200,9 @@ def search():
     searchterms = request.args.get('query')
     results = Book.query.filter("tsv @@ to_tsquery(:ss)").params(ss=searchterms).all()
     results = map(lambda x: x.info_dict(), results)
-    return jsonify(results[0])
+    return render_template('results.html',
+                           results = results,
+                           query = searchterms)
 
 @app.route('/book/<isbn>', methods=['GET','POST'])
 def get_book(isbn):
@@ -209,7 +211,7 @@ def get_book(isbn):
     b = Book.query.filter_by(isbn=isbn).first()
     if b is None:
         return jsonify(data='invalid isbn')
-    return jsonify(data="%s<br>%s<br>%s<br>%s<br><a href='%s'>amazon</a><br><a href='%s'>image</a>"%(b.isbn,b.title,b.author,b.courses,b.amazon_url,b.image))
+    return jsonify(get_amazon_info(isbn))
 
 if __name__ == '__main__':
     app.run(debug = True, host='0.0.0.0', port=5000)
