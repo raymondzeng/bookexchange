@@ -5,6 +5,9 @@
     margin-right: auto;
 }
 
+form {
+    margin-left: 30px;
+}
 .form-control {
     width: 400px;
 }
@@ -16,4 +19,14 @@
 span {
     color: red;
     font-weight: normal;
+}
+
+#preview {
+    text-align: center;
+    height: 300px;
+}
+
+#bookimg {
+    max-height: 200px;
+    margin-left: 30%;
 }

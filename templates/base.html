@@ -30,14 +30,16 @@
 	    <input type="text" class="form-control" placeholder="Search" name="query">
 	  </div>
 	</form>
-	<a id="adv" href="/adv" class="navbar-text navbar-link">Advanced Search</a>
 	{% if not current_user.is_authenticated() %}
 	<a href="/login">
-	  <button type="button" class="btn btn-primary navbar-btn navbar-right">Log in</button>
+	  <button type="button" class="btn btn-info navbar-btn navbar-right log">Log in</button>
 	</a>
 	{% else %}
 	<a href="/logout">
-	  <button type="button" class="btn btn-primary navbar-btn navbar-right">Log out</button>
+	  <button type="button" class="btn btn-info navbar-btn navbar-right log">Log out</button>
+	</a>
+	<a href="/post">
+	  <button type="button" class="btn btn-primary navbar-btn navbar-right sell">Sell Books</button>
 	</a>
 	<p class=" navbar-text navbar-right"> {{ current_user.email }}</p>
 	 {% endif %}

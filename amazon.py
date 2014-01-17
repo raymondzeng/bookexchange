@@ -40,7 +40,7 @@ def get_amazon_image(isbn):
     response = amazon.ItemLookup(ItemId= str(isbn), ResponseGroup="Images", SearchIndex="Books",IdType="ISBN")
     soup = BeautifulSoup(response)
     if soup.largeimage is None:
-        return "error"
+        return None
     else:
         return soup.largeimage.url.string
 

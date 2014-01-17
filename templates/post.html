@@ -1,43 +1,75 @@
 <!-- extend from base layout -->
 {% extends "base.html" %}
 
-{% block content %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+{% block sheets %}
+<link href="/static/register.css" rel="stylesheet">
+{% endblock %}
 
+{% block content %}
 <script>
   $(document).ready(function(){
   $('#isbn').on('input',function(){
   console.log($('#isbn').val());
-  $.post('/book/' + $('#isbn').val()).done(function(data){
-  $('#bookinfo').text(data.data);
+  $('#bookimg').css('display','block');
+  $('#bookimg').attr('src','/static/spinner.gif');
+  $.get('/info/' + $('#isbn').val()).done(function(data){
+  if(data.data == '')
+  $('#bookimg').attr('src','');
+  else
+  $('#bookimg').attr('src',data.data);
   });
   });
   });
 </script>
-<h1>Sell</h1>
-<form action="" method="post" name="post">
-    {{post_form.hidden_tag()}}
-    <p>
-      ISBN:<br>
-      {{ post_form.isbn(size=80) }}<br>
-      {% for error in post_form.errors.isbn %}
-      <span style="color: red;">{{error}}</span>
-      {% endfor %}<br>
-
-      Price:<br>
-      {{ post_form.price(size=80) }}<br>
-      {% for error in post_form.errors.price %}
-      <span style="color: red;">{{error}}</span>
-      {% endfor %}<br>
-
-      Condition:<br>
-      {{ post_form.condition }}<a href="http://www.amazon.com/gp/help/customer/display.html?nodeId=1161242#books" target="_blank">Guidelines</a><br>
-      {% for error in post_form.errors.condition %}
-      <span style="color: red;">{{ error }}</span>
-      {% endfor %}
-    </p>
-    <p><input type="submit" name="btn" value="Sell">
-</form>
-
-<div id="bookinfo"></div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Sell Book</h3>
+  </div>
+  <div class="panel-body">
+    <form action="" method="post" name="post">
+      {{ post_form.hidden_tag() }}
+      <div class="form-group">
+	<label for="isbn">
+	  ISBN*
+	  {% for error in post_form.errors.isbn %}
+	  <span>{{ error }}</span>
+	  {% endfor %}
+	</label>
+	{{ post_form.isbn(class_='form-control') }}
+	<span class="help-block"></span>
+      </div>
+      <div class="form-group">
+	<label for="price">
+	  Price
+	  {% for error in post_form.errors.price %}
+	  <span>{{ error }}</span>
+	  {% endfor %}
+	</label>
+	{{ post_form.price(class_='form-control') }}
+      </div>
+      
+      <div class="form-group">
+	<label for="condition">
+	  Condition*
+	  {% for error in post_form.errors.condition %}
+	  <span>{{ error }}</span>
+	  {% endfor %}
+	</label>
+	{{ post_form.condition(class_='form-control') }}
+      </div>
+      
+      <input class="btn btn-success" type="submit" value="Post Listing">
+    </form>
+  </div>
+</div>
+<div id="preview" class="panel panel-default">
+  <div class="panel-heading">Book Preview</div>
+  <div class="panel-body">
+    <div id="prev-img">
+      <image id="bookimg" style="background: linen; display: none;" src="/static/spinner.gif" alt="No Preview Available"></image>
+    </div>
+  </div>
+  <div class="prev-info">
+  </div>
+</div>
 {% endblock %}

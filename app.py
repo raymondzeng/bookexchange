@@ -7,7 +7,8 @@ from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, SelectField, ValidationError
 from wtforms.validators import Required, Length, EqualTo, Email
 from datetime import datetime
-from amazon import get_amazon_info
+from amazon import get_amazon_info, get_amazon_image
+import time
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -117,16 +118,26 @@ class RegisterForm(Form):
 class PostForm(Form):
     isbn = TextField('isbn', validators = [Required()])
     price = TextField('price')
-    condition = SelectField('condition', choices=[('new', 'New'), 
-                                                ('uln', 'Used - Like New'), 
-                                                ('uvg', 'Used - Very Good'), 
-                                                ('ug', 'Used - Good'), 
-                                                ('ua', 'Used - Acceptable'),
-                                                ('uua', 'Used - Unacceptable')])
+    condition = SelectField('condition', choices=[
+        ('New', 'New'), 
+        ('Used - Like New', 'Used - Like New'), 
+        ('Used - Very Good', 'Used - Very Good'), 
+        ('Used - Good', 'Used - Good'), 
+        ('Used - Acceptable', 'Used - Acceptable'),
+        ('Used - Unacceptable', 'Used - Unacceptable')])
     
+    def validate_price(form, field):
+        if field.data == '':
+            return
+
+        if not field.data.replace('.','',1).isdigit():
+            raise ValidationError('Price must be a number')
+        
     def validate_isbn(form, field):
-        if len(field.data) != 10 and len(field.data) != 13:
-            raise ValidationError('ISBN must be 10 or 13 digits')
+        isbn = field.data.strip().replace('-','')
+        if len(isbn) != 10 and len(isbn) != 13:
+            raise ValidationError('Invalid ISBN')
+        form.isbn = field
 
             
 def process_string(s):
@@ -144,17 +155,6 @@ def index():
     if not current_user.is_authenticated():
         return render_template('home_logged_out.html')
     return render_template('base.html')
-
-@app.route('/sell' , methods=['GET', 'POST'])
-def sell():
-    form = PostForm()
-    if form.validate_on_submit():
-        flash('post received')
-        return redirect(url_for('index'))
-    return render_template('post.html',
-                        title = 'Sell Books',
-                        user_email = current_user.email,
-                        post_form = form)
     
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -166,7 +166,7 @@ def login():
         remember_me = form.remember_me.data
         login_user(form.user,remember=remember_me)
         session['logged_in'] = True
-        return redirect(url_for('index'))
+        return redirect(request.args.get("next") or url_for("index"))
         
     return render_template('login.html', 
                            title = 'Sign In',
@@ -215,7 +215,7 @@ def search():
                            query = searchterms)
 
 @app.route('/book/<isbn>', methods=['GET','POST'])
-def get_book(isbn):
+def book(isbn):
     if not isbn.isdigit():
         return abort(404)
     b = Book.query.filter_by(isbn=isbn).first()
@@ -224,6 +224,32 @@ def get_book(isbn):
     return render_template('book.html',
                            book=b.info_dict(),
                            posts=b.get_posts())
+
+@app.route('/post', methods=['GET','POST'])
+@login_required
+def post():
+    form = PostForm()
+    if form.validate_on_submit():
+        isbn = form.isbn.data
+        price = form.price.data
+        if price == '':
+            price = None
+        cond = form.condition.data
+        p = Post(uid=current_user.id, timestamp=datetime.utcnow(), isbn=isbn, price=price,condition=cond)
+        db.session.add(p)
+        db.session.commit()
+        return redirect(url_for('book',isbn=isbn))
+    return render_template('post.html',
+                           post_form = form)
+@app.route('/info/<isbn>')
+@login_required
+def info(isbn):
+    isbn = isbn.strip().replace('-','')
+    if len(isbn) != 10 and len(isbn) != 13 and not isbn.isdigit():
+        return jsonify(data='')
+    time.sleep(1)
+    img = get_amazon_image(isbn)
+    return jsonify(data=img)
 
 @app.errorhandler(404)
 def page_not_found(e):

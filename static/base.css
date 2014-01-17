@@ -3,11 +3,14 @@ body {
     padding-top: 50px;
 }
 
-.navbar-btn {
+.log {
     margin-right: 20px;
-    margin-left: 20px;
 }
 
+.sell {
+    margin-right: 10px;
+    margin-left: 20px;
+}
 #nav-search input{
     width: 300px;
 }
