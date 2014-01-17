@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block sheets %}
+<link href="/static/book.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div id="book-info">
+  <table class="table">
+    <tr>
+      <td id="image">
+	{% if book['image'] is not none %}
+	<image src={{ book['image'] }} alt="No Image" class="image-thumbnail img-responsive"></image>
+	{% else %}
+	<p> No Image Available </p>
+	{% endif %}
+      </td>
+      <td id="info">
+	<h4>{{ book['title'] }}</h4>
+	<p> by 
+	  {{ book['author'][0] }}
+	  {% for author in book['author'][1:] %}
+	  | {{ author }}
+	  {% endfor %}
+	</p>
+	<p>ISBN-13: {{ book['isbn'] }}</p>
+	<p>
+	  Courses:
+	  {{ book['courses'][0] }}
+	  {% for course in book['courses'][1:] %}
+	  | {{ course }}
+	  {% endfor %}
+	</p>
+	{% if book['amazon_url'] %}
+	<a href={{ book['amazon_url'] }} target="_blank">Click here to view on Amazon</a>
+	{% endif %}
+      </td>
+    </tr>
+  </table>
+</div>
+<div id="posts">
+  {% if posts.count() != 0 %}
+  <div id="offers">
+    <table class="table table-striped">
+      <thead>
+	<tr>
+	  <th>Date</th>
+	  <th>Price</th>
+	  <th>Condition</th>
+	  <th>Contact Seller</th>
+	</tr>
+      </thead>
+      <tbody>
+	{% for post in posts %}
+	<tr>
+	  <td>{{ post.timestamp }}</td>
+	  <td>${{ post.price }}</td>
+	  <td>{{ post.condition }}</td>
+	  <td><a>Contact</a></td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div>
+    <h3 class="lead">Currently No Offers</h3>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

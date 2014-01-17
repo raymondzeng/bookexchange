@@ -1,17 +1,23 @@
 #filter {
     float: left;
     width: 300px;
+    height: 100%;
     text-align: center;
     position: fixed;
+    border-right: 1px #ddd solid;
 }
 #results-cont {
     margin-left: 300px;
-    border-left: .75px 
+    height: 100%;
 }
 
 .image-td {
     width: 130px;
     height: 175px;
+    text-align: center;
+}
+.image-td p{
+    margin-top: 30%;
 }
 .text-td {
     height: 175px;
@@ -19,4 +25,8 @@
 
 .text-td p{
     margin: 1px;
+}
+
+h5 {
+    margin-left: 10px;
 }

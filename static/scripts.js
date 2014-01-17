@@ -19,4 +19,9 @@ $(document).ready(function(){
     $('.navbar-toggle').click(function(){
 	$('#nav-collapse').toggle();
     });
+    $('.date').each(function(){
+	var date = new Date($(this).html() + ' UTC');
+	var s = date.toLocaleDateString();
+	$(this).html(s);
+    });
 });

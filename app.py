@@ -1,12 +1,12 @@
 import os, json
-from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session, abort
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required, user_logged_in
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import ARRAY
 from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, SelectField, ValidationError
 from wtforms.validators import Required, Length, EqualTo, Email
-
+from datetime import datetime
 from amazon import get_amazon_info
 
 app = Flask(__name__)
@@ -61,16 +61,18 @@ class Book(db.Model):
                 'courses': self.courses,
                 'post_count': self.posts.count()}
 
+    def get_posts(self):
+        return self.posts
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime)
-    book_isbn = db.Column(db.BigInteger, db.ForeignKey('book.isbn'))
+    isbn = db.Column(db.BigInteger, db.ForeignKey('book.isbn'))
     price = db.Column(db.Numeric)
-    condition = db.Column(db.Integer)
+    condition = db.Column(db.Text)
     
-
+    
 class LoginForm(Form):
     email = TextField('email', validators = [Required(), Email()])
     password = PasswordField('password', validators = [Required()])
@@ -127,6 +129,12 @@ class PostForm(Form):
             raise ValidationError('ISBN must be 10 or 13 digits')
 
             
+def process_string(s):
+    new_s = s.strip()
+    if len(new_s) == 14 and '-' in new_s:
+        new_s = new_s.replace('-','')
+    return new_s
+
 @lm.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -172,6 +180,7 @@ def register_user(form):
     user = User(email=email, password=password, fb_url=fb_url)
     db.session.add(user)
     db.session.commit()
+    return user
 
 @app.route('/register', methods=['GET','POST'])
 def register():
@@ -180,7 +189,7 @@ def register():
 
     form = RegisterForm()
     if form.validate_on_submit():
-        register_user(form)
+        user = register_user(form)
         login_user(user, remember=True)
         return redirect(url_for('index'))
 
@@ -198,7 +207,8 @@ def logout():
 @app.route('/search')
 def search():
     searchterms = request.args.get('query')
-    results = Book.query.filter("tsv @@ to_tsquery(:ss)").params(ss=searchterms).all()
+    searchterms = process_string(searchterms)
+    results = Book.query.filter("tsv @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
     results = map(lambda x: x.info_dict(), results)
     return render_template('results.html',
                            results = results,
@@ -207,11 +217,17 @@ def search():
 @app.route('/book/<isbn>', methods=['GET','POST'])
 def get_book(isbn):
     if not isbn.isdigit():
-        return jsonify(data='invalid isbn')
+        return abort(404)
     b = Book.query.filter_by(isbn=isbn).first()
     if b is None:
-        return jsonify(data='invalid isbn')
-    return jsonify(get_amazon_info(isbn))
+        return abort(404)
+    return render_template('book.html',
+                           book=b.info_dict(),
+                           posts=b.get_posts())
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(debug = True, host='0.0.0.0', port=5000)
