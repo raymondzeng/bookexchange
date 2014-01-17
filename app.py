@@ -52,6 +52,15 @@ class Book(db.Model):
     amazon_price = db.Column(db.Numeric)
     posts = db.relationship('Post', backref='book', lazy='dynamic')
 
+    def info_dict(self):
+        return {'isbn': self.isbn,
+                'title': self.title,
+                'author': self.author,
+                'amazon_url': self.amazon_url,
+                'image': self.image,
+                'courses': self.courses,
+                'amazon_price': float(self.amazon_price)}
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -186,6 +195,12 @@ def logout():
     session['logged_in'] = False
     return redirect(url_for('index'))
 
+@app.route('/search')
+def search():
+    searchterms = request.args.get('query')
+    results = Book.query.filter("tsv @@ to_tsquery(:ss)").params(ss=searchterms).all()
+    results = map(lambda x: x.info_dict(), results)
+    return jsonify(results[0])
 
 @app.route('/book/<isbn>', methods=['GET','POST'])
 def get_book(isbn):
