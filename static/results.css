@@ -1,3 +1,6 @@
+body {
+    background: none;
+}
 #filter {
     float: left;
     width: 300px;
