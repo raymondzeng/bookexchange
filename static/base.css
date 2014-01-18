@@ -12,10 +12,13 @@ body {
     font: normal normal normal 14px/21.59375px proxima-nova, sans-serif;
     font-size: 18;
 }
-.log {
+.login {
     margin-right: 10px;
 }
 
+.logout {
+    margin-right: 20px;
+}
 .sell {
     margin-right: 10px;
     margin-left: 20px;

@@ -5,13 +5,13 @@ span {
 h3 {
     margin: 0;
 }
-#banner {
-    text-align: center;
-}
 .panel {
-    height: 400px;
+    margin-top: 10px;
+    height: 550px;
 }
-
+form .btn-success {
+    margin-top: 10px;
+}
 #imgp {
     margin-top: 100px;
 }
@@ -24,6 +24,7 @@ h3 {
 #bookimg-div {
     width: 150px;
     margin-left: calc(50% - 75px);
+    margin-top: 50px;
 }
 #bookimg {
     display: none;

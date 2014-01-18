@@ -4,7 +4,7 @@ from flask.ext.login import LoginManager, login_user, logout_user, current_user,
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import ARRAY, TSVECTOR
 from flask_wtf import Form
-from wtforms import TextField, BooleanField, PasswordField, SelectField, ValidationError
+from wtforms import TextField, BooleanField, PasswordField, SelectField, TextAreaField, ValidationError
 from wtforms.validators import Required, Length, EqualTo, Email
 from datetime import datetime
 from amazon import get_amazon_info, get_amazon_image
@@ -52,7 +52,6 @@ class Book(db.Model):
     amazon_url = db.Column(db.Text)
     image = db.Column(db.Text)
     courses = db.Column(ARRAY(db.String(140)))
-    amazon_price = db.Column(db.Numeric)
     tsv = db.Column(TSVECTOR)
     posts = db.relationship('Post', backref='book', lazy='dynamic')
 
@@ -130,7 +129,9 @@ class PostForm(Form):
         ('Used - Acceptable', 'Used - Acceptable'),
         ('Used - Unacceptable', 'Used - Unacceptable'),
         ('New', 'New')])
-    
+    comments = TextAreaField('comments')
+    courses = TextField('courses')
+
     def validate_price(form, field):
         if field.data == '':
             return
@@ -139,7 +140,7 @@ class PostForm(Form):
             raise ValidationError('Price must be a number')
         
     def validate_isbn(form, field):
-        isbn = field.data.strip().replace('-','')
+        isbn = field.data.strip().replace('-','').replace(' ','')
         if len(isbn) != 10 and len(isbn) != 13:
             raise ValidationError('Invalid ISBN')
         form.isbn = field
@@ -213,7 +214,8 @@ def logout():
 def search():
     searchterms = request.args.get('query')
     searchterms = process_string(searchterms)
-    results = Book.query.filter("tsv @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
+    results = Book.query.filter("setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    || setweight(to_tsvector(coalesce(title,'')), 'B')  || setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') || setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B') @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
+    #results = Book.query.filter("tsv @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
     results = map(lambda x: x.info_dict(), results)
     return render_template('results.html',
                            results = results,
@@ -238,12 +240,21 @@ def post():
         if request.args.get('isbn'):
             form.isbn.data = request.args.get('isbn')
     if form.validate_on_submit():
-        isbn = form.isbn.data
+        isbn = form.isbn.data.strip().replace('-','').replace(' ','')
         price = form.price.data
         if price == '':
             price = None
         cond = form.condition.data
-        p = Post(uid=current_user.id, timestamp=datetime.utcnow(), isbn=isbn, price=price,condition=cond)
+        comments = form.comments.data
+        courses = form.courses.data.strip().replace(' ','').upper()
+        if not Book.query.get(isbn):
+            info = get_amazon_info(isbn)
+            image = get_amazon_image(isbn)
+            b = Book(isbn=isbn, title=info['title'], author=info['author'], amazon_url=info['url'], image=image, courses=[courses])
+            db.session.add(b)
+            db.session.commit()
+
+        p = Post(uid=current_user.id, timestamp=datetime.utcnow(), isbn=isbn, price=price,condition=cond,comments=comments)
         db.session.add(p)
         db.session.commit()
         return redirect(url_for('book',isbn=isbn))
@@ -262,7 +273,7 @@ def delete():
 @app.route('/info/<isbn>')
 @login_required
 def info(isbn):
-    isbn = isbn.strip().replace('-','')
+    isbn = isbn.strip().replace('-','').replace(' ','')
     if len(isbn) != 13 or not isbn.isdigit():
         return jsonify(data=None)
     i = Book.query.get(isbn)

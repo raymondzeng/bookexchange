@@ -22,7 +22,7 @@ def get_amazon_info(isbn):
     if error is None:
         info = {'url': soup.detailpageurl.string,
                 'title': soup.title.string, 
-                'authors': map(lambda x: x.get_text(), soup.find_all("author"))}
+                'author': map(lambda x: x.get_text(), soup.find_all("author"))}
         return info
     else:
         return None
