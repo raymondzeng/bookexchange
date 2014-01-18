@@ -12,26 +12,10 @@
 <hr>
 <div class="container">
   <div class="row">
-    <div class="col-md-4">
-      <div id="preview" class="panel panel-default">
-	<div class="panel-heading">Book Preview</div>
-	<div class="panel-body">
-	  <div id="prev-img">
-	    <div id="bookimg-div">
-	      <image id="bookimg" src="/static/spinner.gif" class="img-responsive" alt="No Preview Available"></image>
-	    </div>
-	    <p id="imgp">No Preview Available</p>
-	    <div id="prev-info">
-	      If this book is on Amazon, there should be preview information. Make sure the ISBN-13 # is correct.
-	    </div>
-	  </div>
-	</div>
-      </div>
-    </div><!-- end col-->
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <div class="panel panel-default">
-	<div class="panel-heading"><h3>1. Add Book</h3></div>
+	<div class="panel-heading"><h3>Add Book</h3></div>
 	<div class="panel-body">
 	  <form action="" method="post" name="post">
 	    {{ post_form.hidden_tag() }}
@@ -72,7 +56,25 @@
       </div>
     </div><!--end col-->
     
-    <div class="col-md-4">
+
+    <div class="col-md-6">
+      <div id="preview" class="panel panel-default">
+	<div class="panel-heading">Book Preview</div>
+	<div class="panel-body">
+	  <div id="prev-img">
+	    <div id="bookimg-div">
+	      <image id="bookimg" src="/static/spinner.gif" class="img-responsive" alt="No Preview Available"></image>
+	    </div>
+	    <p id="imgp">No Preview Available</p>
+	    <div id="prev-info">
+	      If this book is on Amazon, there should be preview information. Make sure the ISBN-13 # is correct.
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div><!-- end col-->
+
+    <!--div class="col-md-4">
       <div id="prev-list" class="panel panel-default">
 	<div class="panel-heading"><h3>2. Confirm</h3></div>
 	<div class="panel-body">
