@@ -23,7 +23,7 @@ h3 {
 }
 #bookimg-div {
     width: 150px;
-    margin-left: 30%;
+    margin-left: calc(50% - 75px);
 }
 #bookimg {
     display: none;

@@ -56,12 +56,19 @@ function getPreview(){
 	else{
 	    $('#bookimg').attr('src',data.image);
 	    $('#imgp').css('display','none');
-	    var title;
+	    var title, author;
 	    if(data.title == null)
 		title = 'No Title Available';
 	    else
 		title = data.title;
-	    $('#prev-info').html(title);
+	    author = ''
+	    if(data.author != null){
+		author = data.author[0];
+		for(var i = 1; i < data.author.length; i++)
+		    author = author.concat(' | '+data.author[i]);
+	    }
+	    console.log(author);
+	    $('#prev-info').html('<label>'+title+'</label><p>'+author+'</p>');
 	}
     });
 }

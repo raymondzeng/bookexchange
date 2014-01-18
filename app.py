@@ -269,7 +269,8 @@ def info(isbn):
     if i:
         return jsonify(
             title=i.title,
-            image=i.image)
+            image=i.image,
+            author=i.author)
     time.sleep(1)
     img = get_amazon_image(isbn)
     time.sleep(1)
@@ -278,7 +279,7 @@ def info(isbn):
         return jsonify(
             title=info['title'],
             image=img,
-            fail=1)
+            author=info['author'])
     return jsonify(title=None)
 
 @app.errorhandler(404)

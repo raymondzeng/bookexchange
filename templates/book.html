@@ -56,6 +56,7 @@
 	  <th>Date</th>
 	  <th>Price</th>
 	  <th>Condition</th>
+	  <th>Comments</th>
 	  <th>Contact Seller</th>
 	</tr>
       </thead>
@@ -69,6 +70,11 @@
 	  <td>${{ post.price }}</td>
 	  {% endif %}
 	  <td>{{ post.condition }}</td>
+	  {% if not post.comments %}
+	  <td></td>
+	  {% else %}
+	  <td>{{ post.comments }}</td>
+	  {% endif %}
 	  <td><a>Contact</a></td>
 	</tr>
 	{% endfor %}
