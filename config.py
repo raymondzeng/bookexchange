@@ -1,5 +1,13 @@
+import os
 
 CSRF_ENABLED = True
-SECRET_KEY = '\xaf \xf8\xe3\xd0\x93\xf6m\x88\xa7\x02\xda\xb4K\x99\xdd\xe8\xd4\x82q\xf6\x9f\x96\x0f'
+SECRET_KEY = os.environ['SECRET_KEY']
+MAIL_SERVER = 'smtp.googlemail.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = os.environ['GMAIL_U']
+MAIL_PASSWORD = os.environ['GMAIL_P']
+DEFAULT_MAIL_SENDER = os.environ['DEF_SENDER']
 
 

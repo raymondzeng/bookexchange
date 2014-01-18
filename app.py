@@ -2,6 +2,7 @@ import os, json
 from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session, abort
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required, user_logged_in
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.mail import Mail
 from sqlalchemy.dialects.postgresql import ARRAY, TSVECTOR
 from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, SelectField, TextAreaField, ValidationError
@@ -20,6 +21,8 @@ db = SQLAlchemy(app)
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = '/login'
+
+mail = Mail(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,3 +1,9 @@
+@-moz-document url-prefix() {
+    img {
+        width: 100%;
+    }
+}
+
 body {
     padding: 10px;
     padding-top: 50px;
