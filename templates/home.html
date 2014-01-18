@@ -8,6 +8,7 @@
 <div id="wrapper">
   <div id="user-info" class="panel panel-default">
     <p><label>Email:</label> {{ current_user.email }}</p>
+    <p><label>Facebook:</label> {{current_user.fb_url}}</p>
     <p>
       <label>Contact Preference:</label> 
       {% if current_user.pref == 'e' %}
@@ -16,6 +17,36 @@
       Facebook
       {% endif %}
     </p>
+    <a data-toggle="modal" data-target="#myModal">
+      Settings
+    </a>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+	<div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Settings</h4>
+	</div>
+	<div class="modal-body">
+	  <form id="settings" action="/settings" method="get">
+	    <label>Change Facebook URL</label>
+	    <input type="text" name="myinput" value={{ current_user.fb_url }}>
+	    <br>
+            <label>Contact Preference:</label>
+	    <select name="myselect" class="select">
+	      <option value="e"> Email: {{current_user.email }}</option>
+	      <option value="f"> Facebook: {{ current_user.fb_url }}</option>
+	    </select>
+	  </form>
+	</div>
+	<div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="save" type="submit" class="btn btn-primary">Save changes</button>
+	</div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
   </div>
   <div id="posts" class="panel panel-default">
     <div class="panel-heading">

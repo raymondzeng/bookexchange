@@ -293,6 +293,15 @@ def info(isbn):
             author=info['author'])
     return jsonify(title=None)
 
+@app.route('/settings', methods=['get','POST'])
+@login_required
+def settings():
+    choice = request.args.get('myselect')
+    fb = request.args.get('myinput')
+    current_user.fb_url = fb
+    current_user.pref = choice
+    db.session.commit()
+    return redirect(url_for('index'))
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404

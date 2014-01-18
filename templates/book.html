@@ -75,7 +75,11 @@
 	  {% else %}
 	  <td>{{ post.comments }}</td>
 	  {% endif %}
-	  <td><a>Contact</a></td>
+	  {% if post.seller.pref == 'e' %}
+	  <td><a href="mailto:{{ post.seller.email }}">Email</a></td>
+	  {% else %}
+	  <td><a href={{ post.seller.fb_url }}>Facebook</a></td>
+	  {% endif %}
 	</tr>
 	{% endfor %}
       </tbody>

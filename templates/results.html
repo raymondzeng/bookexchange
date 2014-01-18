@@ -15,6 +15,14 @@
   <div id="results-cont">
     <table class="table">
       <h5>Showing results for &quot;{{ query }}&quot;  <small>{{ results|count }} item(s)</h5>
+      {% if results|count == 0 %}
+      <!--div id="tips">
+	<p>Suggestions:</p>
+	<ul>
+	  <li>Entering an ISBN-13 is guaranteed to return the book if it's in our database - if it's not, it means no one's selling it</li>
+	</ul>
+      </div-->
+      {% endif %}
       {% for book in results %}
       <tr>
 	<td class="image-td">

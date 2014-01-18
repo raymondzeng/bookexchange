@@ -16,9 +16,6 @@ $(document).ready(function(){
 	});
 	$('#adv').show();
     });
-    $('.navbar-toggle').click(function(){
-	$('#nav-collapse').toggle();
-    });
     $('.date').each(function(){
 	var date = new Date($(this).html() + ' UTC');
 	var s = date.toLocaleDateString();
@@ -39,6 +36,9 @@ $(document).ready(function(){
     
     if($('#isbn').val() != '')
 	getPreview();
+    $('#save').click(function(){
+	$('#settings').submit();
+    });
 });
 
 function getPreview(){
