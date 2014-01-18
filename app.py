@@ -249,11 +249,9 @@ def post():
 def delete():
     pid = request.form['id']
     post = Post.query.get(pid)
-    if post.seller.email == current_user.email:
-        db.session.delete(post)
-        db.session.commit()
-        return redirect(url_for('index'))
-    return redirect(404)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('index'))
 
 @app.route('/info/<isbn>')
 @login_required
