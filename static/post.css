@@ -1,0 +1,30 @@
+span {
+    color: red;
+    font-weight: normal;
+}
+h3 {
+    margin: 0;
+}
+#banner {
+    text-align: center;
+}
+.panel {
+    height: 400px;
+}
+
+#imgp {
+    margin-top: 100px;
+}
+#prev-info {
+    margin-top: 10px;
+}
+#prev-img {
+    text-align: center;
+}
+#bookimg-div {
+    width: 150px;
+    margin-left: 30%;
+}
+#bookimg {
+    display: none;
+}

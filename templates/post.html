@@ -2,62 +2,83 @@
 {% extends "base.html" %}
 
 {% block sheets %}
-<link href="/static/panels.css" rel="stylesheet">
+<link href="/static/post.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<script>
-</script>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Sell Book</h3>
-  </div>
-  <div class="panel-body">
-    <form action="" method="post" name="post">
-      {{ post_form.hidden_tag() }}
-      <div class="form-group">
-	<label for="isbn">
-	  ISBN*
-	  {% for error in post_form.errors.isbn %}
-	  <span>{{ error }}</span>
-	  {% endfor %}
-	</label>
-	{{ post_form.isbn(class_='form-control') }}
-	<span class="help-block"></span>
-      </div>
-      <div class="form-group">
-	<label for="price">
-	  Price
-	  {% for error in post_form.errors.price %}
-	  <span>{{ error }}</span>
-	  {% endfor %}
-	</label>
-	{{ post_form.price(class_='form-control') }}
-	<p class="help-block">If price left blank, 'Contact Seller' will be shown</p>
-      </div>
-      
-      <div class="form-group">
-	<label for="condition">
-	  Condition*
-	  {% for error in post_form.errors.condition %}
-	  <span>{{ error }}</span>
-	  {% endfor %}
-	</label>
-	{{ post_form.condition(class_='form-control') }}
-      </div>
-      
-      <input class="btn btn-success" type="submit" value="Post Listing">
-    </form>
-  </div>
+<div id="banner">
+  <h1>Sell Books</h1>
 </div>
-<div id="preview" class="panel panel-default">
-  <div class="panel-heading">Book Preview</div>
-  <div class="panel-body">
-    <div id="prev-img">
-      <image id="bookimg" style="background: linen; display: none;" src="/static/spinner.gif" alt="No Preview Available"></image>
-    </div>
-  </div>
-  <div class="prev-info">
+<hr>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div id="preview" class="panel panel-default">
+	<div class="panel-heading">Book Preview</div>
+	<div class="panel-body">
+	  <div id="prev-img">
+	    <div id="bookimg-div">
+	      <image id="bookimg" src="/static/spinner.gif" class="img-responsive" alt="No Preview Available"></image>
+	    </div>
+	    <p id="imgp">No Preview Available</p>
+	    <div id="prev-info">
+	      If this book is on Amazon, there should be preview information. Make sure the ISBN-13 # is correct.
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div><!-- end col-->
+
+    <div class="col-md-4">
+      <div class="panel panel-default">
+	<div class="panel-heading"><h3>1. Add Book</h3></div>
+	<div class="panel-body">
+	  <form action="" method="post" name="post">
+	    {{ post_form.hidden_tag() }}
+	    <div class="form-group">
+	      <label for="isbn">
+		ISBN-13*
+		{% for error in post_form.errors.isbn %}
+		<span>{{ error }}</span>
+		{% endfor %}
+	      </label>
+	      {{ post_form.isbn(class_='form-control') }}
+	      <span class="help-block"></span>
+	    </div>
+	    <div class="form-group">
+	      <label for="price">
+		Price
+		{% for error in post_form.errors.price %}
+		<span>{{ error }}</span>
+		{% endfor %}
+	      </label>
+	      {{ post_form.price(class_='form-control') }}
+	      <p class="help-block">If price left blank, 'Contact Seller' will be shown</p>
+	    </div>
+	    
+	    <div class="form-group">
+	      <label for="condition">
+		Condition*
+		{% for error in post_form.errors.condition %}
+		<span>{{ error }}</span>
+		{% endfor %}
+	      </label>
+	      {{ post_form.condition(class_='form-control') }}
+	    </div>
+	    
+	    <input class="btn btn-success" type="submit" value="Post Listing">
+	  </form>
+	</div>
+      </div>
+    </div><!--end col-->
+    
+    <div class="col-md-4">
+      <div id="prev-list" class="panel panel-default">
+	<div class="panel-heading"><h3>2. Confirm</h3></div>
+	<div class="panel-body">
+	</div>
+      </div>
+    </div><!--end col-->
   </div>
 </div>
 {% endblock %}

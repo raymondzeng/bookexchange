@@ -24,22 +24,44 @@ $(document).ready(function(){
 	var s = date.toLocaleDateString();
 	$(this).html(s);
     });
-    $('table button').click(function(){
+    $('.td-button').click(function(){
 	if(confirm('Are you sure you want to delete this post? Can not be undone')){
 	    $('<form action="/delete" method="POST">' + 
 	      '<input type="hidden" name="id" value="' + $(this).attr('id') + '">' +
 	      '</form>').submit();
 	}
     });
-    
     $('#isbn').on('input',function(){
-	$('#bookimg').css('display','block');
-	$('#bookimg').attr('src','/static/spinner.gif');
-	$.get('/info/' + $('#isbn').val()).done(function(data){
-	    if(data.data == '')
-		$('#bookimg').attr('src','');
-	    else
-		$('#bookimg').attr('src',data.data);
-	});
+	if($(this).val().trim() == '')
+	    return;
+	getPreview();
     });
+    
+    if($('#isbn').val() != '')
+	getPreview();
 });
+
+function getPreview(){
+    $('#bookimg').css('display','block');
+    $('#imgp').css('display','none');
+    $('#prev-info').html('If this book is on sold on Amazon, there should be preview information. Make sure the ISBN-13 # is correct.');
+    $('#bookimg').attr('src','/static/spinner.gif');
+    $.get('/info/' + $('#isbn').val()).done(function(data){
+	if(data.title == null){
+	    $('#bookimg').css('display','none');
+	    $('#imgp').css('display','block');
+	    $('#prev-info').html('If this book is on sold on Amazon, there should be preview information. Make sure the ISBN-13 # is correct.');
+	    $('#prev-info').css('display','block');
+	}
+	else{
+	    $('#bookimg').attr('src',data.image);
+	    $('#imgp').css('display','none');
+	    var title;
+	    if(data.title == null)
+		title = 'No Title Available';
+	    else
+		title = data.title;
+	    $('#prev-info').html(title);
+	}
+    });
+}

@@ -2,13 +2,14 @@ import os, json
 from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session, abort
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required, user_logged_in
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY, TSVECTOR
 from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, SelectField, ValidationError
 from wtforms.validators import Required, Length, EqualTo, Email
 from datetime import datetime
 from amazon import get_amazon_info, get_amazon_image
 import time
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -52,6 +53,7 @@ class Book(db.Model):
     image = db.Column(db.Text)
     courses = db.Column(ARRAY(db.String(140)))
     amazon_price = db.Column(db.Numeric)
+    tsv = db.Column(TSVECTOR)
     posts = db.relationship('Post', backref='book', lazy='dynamic')
 
     def info_dict(self):
@@ -65,6 +67,7 @@ class Book(db.Model):
 
     def get_posts(self):
         return self.posts
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -121,12 +124,12 @@ class PostForm(Form):
     isbn = TextField('isbn', validators = [Required()])
     price = TextField('price')
     condition = SelectField('condition', choices=[
-        ('New', 'New'), 
-        ('Used - Like New', 'Used - Like New'), 
+        ('Used - Like New', 'Used - Like New'),         
         ('Used - Very Good', 'Used - Very Good'), 
         ('Used - Good', 'Used - Good'), 
         ('Used - Acceptable', 'Used - Acceptable'),
-        ('Used - Unacceptable', 'Used - Unacceptable')])
+        ('Used - Unacceptable', 'Used - Unacceptable'),
+        ('New', 'New')])
     
     def validate_price(form, field):
         if field.data == '':
@@ -231,6 +234,9 @@ def book(isbn):
 @login_required
 def post():
     form = PostForm()
+    if request.method == 'GET':
+        if request.args.get('isbn'):
+            form.isbn.data = request.args.get('isbn')
     if form.validate_on_submit():
         isbn = form.isbn.data
         price = form.price.data
@@ -257,11 +263,23 @@ def delete():
 @login_required
 def info(isbn):
     isbn = isbn.strip().replace('-','')
-    if len(isbn) != 10 and len(isbn) != 13 and not isbn.isdigit():
-        return jsonify(data='')
+    if len(isbn) != 13 or not isbn.isdigit():
+        return jsonify(data=None)
+    i = Book.query.get(isbn)
+    if i:
+        return jsonify(
+            title=i.title,
+            image=i.image)
     time.sleep(1)
     img = get_amazon_image(isbn)
-    return jsonify(data=img)
+    time.sleep(1)
+    info = get_amazon_info(isbn)
+    if info:
+        return jsonify(
+            title=info['title'],
+            image=img,
+            fail=1)
+    return jsonify(title=None)
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -5,38 +5,47 @@
 {% endblock %}
 
 {% block content %}
-<div id="book-info">
-  <table class="table">
-    <tr>
-      <td id="image">
-	{% if book['image'] is not none %}
-	<image src={{ book['image'] }} alt="No Image" class="image-thumbnail img-responsive"></image>
+<div id="book-info" class="container">
+  <div id="info-table" class="row">
+    <div id="image" class="col-md-2">
+      {% if book['image'] is not none %}
+      <image src={{ book['image'] }} alt="No Image" class="image-thumbnail img-responsive"></image>
+      
+      {% else %}
+      <p> No Image Available </p>
+      {% endif %}
+    </div>
+    <div class="col-md-8">	
+      <h4>{{ book['title'] }}</h4>
+      <p> by 
+	{{ book['author'][0] }}
+	{% for author in book['author'][1:] %}
+	| {{ author }}
+	{% endfor %}
+      </p>
+      <p>ISBN-13: {{ book['isbn'] }}</p>
+      <p>
+	Courses:
+	{{ book['courses'][0] }}
+	{% for course in book['courses'][1:] %}
+	| {{ course }}
+	{% endfor %}
+      </p>
+      {% if book['amazon_url'] %}
+      <a href={{ book['amazon_url'] }} target="_blank">Click here to view on Amazon</a>
+      {% endif %}
+    </div>
+    <div class="col-md-2">
+      <form id="sell-redirect" action="/post" method="GET">
+	<input type="hidden" name="isbn" value={{ book['isbn'] }}>
+	{% if current_user.is_authenticated() %}
+	<input type="submit" class="btn btn-success pull-right" value="Sell This Book">
 	{% else %}
-	<p> No Image Available </p>
+	<input type="submit" class="btn btn-primary pull-right" value="Log in to Sell This Book">      
 	{% endif %}
-      </td>
-      <td id="info">
-	<h4>{{ book['title'] }}</h4>
-	<p> by 
-	  {{ book['author'][0] }}
-	  {% for author in book['author'][1:] %}
-	  | {{ author }}
-	  {% endfor %}
-	</p>
-	<p>ISBN-13: {{ book['isbn'] }}</p>
-	<p>
-	  Courses:
-	  {{ book['courses'][0] }}
-	  {% for course in book['courses'][1:] %}
-	  | {{ course }}
-	  {% endfor %}
-	</p>
-	{% if book['amazon_url'] %}
-	<a href={{ book['amazon_url'] }} target="_blank">Click here to view on Amazon</a>
-	{% endif %}
-      </td>
-    </tr>
-  </table>
+      </form>
+    </div>
+  </div>
 </div>
 <div id="posts">
   {% if posts.count() != 0 %}

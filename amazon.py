@@ -25,7 +25,7 @@ def get_amazon_info(isbn):
                 'authors': map(lambda x: x.get_text(), soup.find_all("author"))}
         return info
     else:
-        return error.string
+        return None
 
 def get_amazon_price(isbn):
     response = amazon.ItemLookup(ItemId= str(isbn), ResponseGroup="ItemAttributes", SearchIndex="Books",IdType="ISBN")

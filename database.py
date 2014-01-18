@@ -46,9 +46,8 @@ for course in c:
         if isbn.isdigit():
             i.append(isbn)
     clean.append({'id': course['id'], 'isbns': list(set(i))})
-
-# populate database
 """
+# populate database
 while True:
     try:
         for course in clean:
@@ -73,9 +72,8 @@ while True:
         print "restarting"
         continue
     break
-
 """
-
+"""
 # add price values
 books = Book.query.filter(Book.amazon_url != None)
 
@@ -92,3 +90,4 @@ while True:
         continue
     break
 
+"""
