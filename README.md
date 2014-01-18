@@ -39,22 +39,13 @@ The main focus is **UX**. Has to be very **easy to use**. but of course function
   
 ## TODO:
 
-### Critical
-* login/account system:
-  * users will register with an account name, password, and their email
-  * store preferred contact method
-  * LATER FEATURE: option to sign in with facebook/google
-* Searching/submitting *posts*
-  * store posts in a way that its easy to quickly get all the posts selling the same book
-  * store data so Searching as outlined in General Structure is fast and accurate
-  * general and advanced search
+* Subscription system (Flask-mail?)
+* Filter search results
+* paginate search results/posts/etc
+* sell multiple books in one submit
 
-### Not so critical
-* Subscribing
-  * users can 'follow' a book so they get an email everytime someone submits a *post* selling that book
-
-* Get all the books that Brown Courses use so we have a good set of books to begin with 
-
-### Last Features
-* Ability for seller's to take picture of barcode/isbn instead of typing
-  * in a way that its easy to take pictures of many books at one time
+## maybe
+* option to sign in with facebook/google
+* better search
+* geographical based search/info storing
+* get Fall textbook info
