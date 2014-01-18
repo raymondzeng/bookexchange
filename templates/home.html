@@ -8,7 +8,14 @@
 <div id="wrapper">
   <div id="user-info" class="panel panel-default">
     <p><label>Email:</label> {{ current_user.email }}</p>
-    <p><label>Contact Preference:</label> Email</p>
+    <p>
+      <label>Contact Preference:</label> 
+      {% if current_user.pref == 'e' %}
+      Email
+      {% else %}
+      Facebook
+      {% endif %}
+    </p>
   </div>
   <div id="posts" class="panel panel-default">
     <div class="panel-heading">

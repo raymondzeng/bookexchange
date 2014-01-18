@@ -25,6 +25,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
     fb_url = db.Column(db.Text, default=None)
+    pref = db.Column(db.Text, default='e')
     posts = db.relationship('Post', backref='seller', lazy='dynamic')
 
     def is_authenticated(self):
@@ -72,6 +73,7 @@ class Post(db.Model):
     isbn = db.Column(db.BigInteger, db.ForeignKey('book.isbn'))
     price = db.Column(db.Numeric)
     condition = db.Column(db.Text)
+    comments = db.Column(db.Text)
     
     
 class LoginForm(Form):
