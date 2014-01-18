@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block sheets %}
+<link href="/static/home.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+  <div id="user-info" class="panel panel-default">
+    <p><label>Email:</label> {{ current_user.email }}</p>
+    <p><label>Contact Preference:</label> Email</p>
+  </div>
+  <div id="posts" class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Your Posts <small>Remove posts after a sale to prevent further communication</small></h3>
+    </div>
+    <div class="panel-body">
+      <div>
+	{% if current_user.posts.count() != 0 %}
+	<div id="offers">
+	  <table class="table table-striped">
+	    <thead>
+	      <tr>	      
+		<th>Date</th>
+		<th></th>
+		<th>ISBN</th>
+		<th>Title</th>
+		<th>Price</th>
+		<th></th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      {% for post in current_user.posts.all() %}
+	      <tr>
+		<td class="date">{{ post.timestamp }}</td>
+		<td class="image-td"><image src={{ post.book.image }} alt="No Image" class="img-thumbnail img-responseive"></image></td>
+		<td><a href="/book/{{ post.book.isbn }}">{{ post.book.isbn }}</a></td>
+		<td>{{ post.book.title }}</td>
+		{% if not post.price %}
+		<td> Contact Seller </td>
+		{% else %}
+		<td>${{ post.price }}</td>
+		{% endif %}
+		<td><button id={{ post.id }} class="btn btn-danger" value="remove"><span class="glyphicon glyphicon-remove"></span></button></td>
+	      </tr>
+	      {% endfor %}
+	    </tbody>
+	  </table>
+	</div>
+	{% else %}
+	<div id="posts">
+	  <h3 class="lead">No Posts</h3>
+	</div>
+	{% endif %}
+      </div>
+      {% endblock %}
+    </div>
+  </div>
+</div>

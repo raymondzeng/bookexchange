@@ -2,24 +2,11 @@
 {% extends "base.html" %}
 
 {% block sheets %}
-<link href="/static/register.css" rel="stylesheet">
+<link href="/static/panels.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <script>
-  $(document).ready(function(){
-  $('#isbn').on('input',function(){
-  console.log($('#isbn').val());
-  $('#bookimg').css('display','block');
-  $('#bookimg').attr('src','/static/spinner.gif');
-  $.get('/info/' + $('#isbn').val()).done(function(data){
-  if(data.data == '')
-  $('#bookimg').attr('src','');
-  else
-  $('#bookimg').attr('src',data.data);
-  });
-  });
-  });
 </script>
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -46,6 +33,7 @@
 	  {% endfor %}
 	</label>
 	{{ post_form.price(class_='form-control') }}
+	<p class="help-block">If price left blank, 'Contact Seller' will be shown</p>
       </div>
       
       <div class="form-group">

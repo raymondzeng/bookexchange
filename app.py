@@ -153,8 +153,8 @@ def load_user(user_id):
 @app.route('/', methods=['GET','POST'])
 def index():
     if not current_user.is_authenticated():
-        return render_template('home_logged_out.html')
-    return render_template('base.html')
+        return render_template('index.html')
+    return render_template('home.html')
     
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -241,6 +241,18 @@ def post():
         return redirect(url_for('book',isbn=isbn))
     return render_template('post.html',
                            post_form = form)
+
+@app.route('/delete', methods=['POST'])
+@login_required
+def delete():
+    pid = request.form['id']
+    post = Post.query.get(pid)
+    if post.seller.email == current_user.email:
+        db.session.delete(post)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return redirect(404)
+
 @app.route('/info/<isbn>')
 @login_required
 def info(isbn):

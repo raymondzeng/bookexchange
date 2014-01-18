@@ -1,26 +1,6 @@
-html, body{
-    text-align: left;
+body {
+    padding: 10px;
 }
-
-#menu{
-    padding-bottom: 5px;
+#big-search {
     width: 100%;
-}
-#menu ul li a{
-    text-align: center;
-    font-size: 15px;
-}
-
-#advancedsearch form fieldset input{
-    width: 100%
-}
-
-#logged-out, #registration{
-    margin-top: 10px;
-}
-#login, #register, #registration{
-    width: 90%;
-}
-#registrate-email,#registrate-password,#registrate-reenter,#registrate-facebook,#registrate-phone{
-    width:100%;
 }

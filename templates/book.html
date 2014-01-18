@@ -54,7 +54,11 @@
 	{% for post in posts %}
 	<tr>
 	  <td class="date">{{ post.timestamp }}</td>
+	  {% if not post.price %}
+	  <td> Contact Seller </td>
+	  {% else %}
 	  <td>${{ post.price }}</td>
+	  {% endif %}
 	  <td>{{ post.condition }}</td>
 	  <td><a>Contact</a></td>
 	</tr>

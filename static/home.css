@@ -1,0 +1,28 @@
+#wrapper {
+    padding: 10px;
+}
+h3 {
+    margin: 0;
+}
+#user-info {
+    padding: 10px;
+    width: 400px;
+    float: left;
+}
+#posts {
+    margin-left: 410px;
+}
+
+#noposts {
+    text-align: center;
+}
+.image-td {
+    width: 80px;
+    height: 100px;
+    text-align: center;
+}
+
+#noposts {
+    text-align: center;
+    padding-top: 10px;
+}

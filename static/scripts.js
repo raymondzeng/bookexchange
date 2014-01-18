@@ -24,4 +24,22 @@ $(document).ready(function(){
 	var s = date.toLocaleDateString();
 	$(this).html(s);
     });
+    $('table button').click(function(){
+	if(confirm('Are you sure you want to delete this post? Can not be undone')){
+	    $('<form action="/delete" method="POST">' + 
+	      '<input type="hidden" name="id" value="' + $(this).attr('id') + '">' +
+	      '</form>').submit();
+	}
+    });
+    
+    $('#isbn').on('input',function(){
+	$('#bookimg').css('display','block');
+	$('#bookimg').attr('src','/static/spinner.gif');
+	$.get('/info/' + $('#isbn').val()).done(function(data){
+	    if(data.data == '')
+		$('#bookimg').attr('src','');
+	    else
+		$('#bookimg').attr('src',data.data);
+	});
+    });
 });
