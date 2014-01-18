@@ -6,28 +6,29 @@
 
 {% block content %}
 <div id="wrapper">
-  <div id="filter">
+  <!--div id="filter">
     <h4>Filter by:</h4>
     <hr>
     <h3>Coming Soon</h3>
-  </div>
+  </div-->
 
   <div id="results-cont">
     <table class="table">
       <h5>Showing results for &quot;{{ query }}&quot;  <small>{{ results|count }} item(s)</h5>
       {% if results|count == 0 %}
-      <!--div id="tips">
+      <div id="tips">
 	<p>Suggestions:</p>
 	<ul>
-	  <li>Entering an ISBN-13 is guaranteed to return the book if it's in our database - if it's not, it means no one's selling it</li>
+	  <li>Entering an ISBN-13 is guaranteed to return a book if it's in our database - if it's not, it means no one's selling it</li>
+	  <li>Course codes must be the full code e.g. econ0110, csci0160 (no space)</li>
 	</ul>
-      </div-->
+      </div>
       {% endif %}
       {% for book in results %}
       <tr>
 	<td class="image-td">
 	  {% if book['image'] is not none %}
-	  <image src={{ book['image'] }} alt="No Image" class="image-thumbnail img-responsive"></image>
+	  <a href="/book/{{ book['isbn'] }}"><image src={{ book['image'] }} alt="No Image" class="image-thumbnail img-responsive"></image></a>
 	  {% else %}
 	  <p>No Image Available</p>
 	  {% endif %}

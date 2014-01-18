@@ -212,7 +212,7 @@ def logout():
 
 @app.route('/search')
 def search():
-    searchterms = request.args.get('query')
+    searchterms = request.args.get('q')
     searchterms = process_string(searchterms)
     results = Book.query.filter("setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    || setweight(to_tsvector(coalesce(title,'')), 'B')  || setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') || setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B') @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
     #results = Book.query.filter("tsv @@ plainto_tsquery(:ss)").params(ss=searchterms).all()

@@ -7,7 +7,6 @@
     border-right: 1px #ddd solid;
 }
 #results-cont {
-    margin-left: 300px;
     height: 100%;
 }
 
@@ -29,4 +28,10 @@
 
 h5 {
     margin-left: 10px;
+}
+
+#tips {
+    font-size: 20px;
+    margin: 20px;
+    margin-top: 100px;
 }

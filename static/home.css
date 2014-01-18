@@ -6,13 +6,10 @@ h3 {
 }
 #user-info {
     padding: 10px;
-    width: 400px;
-    float: left;
 }
-#posts {
-    margin-left: 410px;
+.panel {
+    min-height: 147px;
 }
-
 #noposts {
     text-align: center;
 }
@@ -24,5 +21,11 @@ h3 {
 
 #noposts {
     text-align: center;
-    padding-top: 10px;
+}
+
+#noposts h3{
+    margin-top: 20px;
+}
+#modal-launch:hover {
+    cursor: pointer;
 }
