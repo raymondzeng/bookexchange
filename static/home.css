@@ -1,5 +1,6 @@
 #wrapper {
     padding: 10px;
+    padding-top: 20px;
 }
 h3 {
     margin: 0;
@@ -10,7 +11,11 @@ h3 {
 .panel {
     min-height: 147px;
 }
-#noposts {
+.panel-body {
+    padding: 0;
+}
+#noposts, #nosubs {
+    padding-top: 10px;
     text-align: center;
 }
 .image-td {
@@ -27,5 +32,13 @@ h3 {
     margin-top: 20px;
 }
 #modal-launch:hover {
+    cursor: pointer;
+}
+
+#subs {
+    min-height: 0;
+}
+.sub-x:hover {
+    color: rgb(217, 83, 97);
     cursor: pointer;
 }

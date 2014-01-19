@@ -2,7 +2,7 @@ import os, json
 from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session, abort
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required, user_logged_in
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.mail import Mail
+from flask.ext.mail import Mail, Message
 from sqlalchemy.dialects.postgresql import ARRAY, TSVECTOR
 from flask_wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, SelectField, TextAreaField, ValidationError
@@ -10,12 +10,13 @@ from wtforms.validators import Required, Length, EqualTo, Email
 from datetime import datetime
 from amazon import get_amazon_info, get_amazon_image
 import time
+from threading import Thread
 
 
 app = Flask(__name__)
 app.config.from_object('config')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
-
+sender = os.environ['DEF_SENDER']
 
 db = SQLAlchemy(app)
 lm = LoginManager()
@@ -31,6 +32,7 @@ class User(db.Model):
     fb_url = db.Column(db.Text, default=None)
     pref = db.Column(db.Text, default='e')
     posts = db.relationship('Post', backref='seller', lazy='dynamic')
+    subscriptions = db.relationship('Subscription', backref='subscriber', lazy='dynamic')
 
     def is_authenticated(self):
         return True
@@ -57,7 +59,7 @@ class Book(db.Model):
     courses = db.Column(ARRAY(db.String(140)))
     tsv = db.Column(TSVECTOR)
     posts = db.relationship('Post', backref='book', lazy='dynamic')
-
+    subscribers = db.relationship('Subscription', backref='book', lazy='dynamic')
     def info_dict(self):
         return {'isbn': self.isbn,
                 'title': self.title,
@@ -81,6 +83,13 @@ class Post(db.Model):
     comments = db.Column(db.Text)
     
     
+class Subscription(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime)
+    user = db.Column(db.String(120), db.ForeignKey('user.email'))
+    isbn = db.Column(db.BigInteger, db.ForeignKey('book.isbn'))
+
+
 class LoginForm(Form):
     email = TextField('email', validators = [Required(), Email()])
     password = PasswordField('password', validators = [Required()])
@@ -148,7 +157,22 @@ class PostForm(Form):
             raise ValidationError('Invalid ISBN')
         form.isbn = field
 
-            
+def send_email(msg):
+    mail.send(msg)
+
+def email_subbers(post):
+    recip = post.book.subscribers.all()
+    if len(recip) == 0:
+        return
+    recip = map(lambda x: x.user, recip)
+    subj = 'New Offer for "%s"'%(str(post.book.title))
+    html = render_template('email.html',
+                           post=post)
+    msg = Message(subj, sender=sender, recipients=recip)
+    msg.html = html
+    thr = Thread(target = send_email, args = [msg])
+    thr.start()
+
 def process_string(s):
     new_s = s.strip()
     if len(new_s) == 14 and '-' in new_s:
@@ -217,7 +241,7 @@ def logout():
 def search():
     searchterms = request.args.get('q')
     searchterms = process_string(searchterms)
-    results = Book.query.filter("setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    || setweight(to_tsvector(coalesce(title,'')), 'B')  || setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') || setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B') @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
+    results = sorted(Book.query.filter("setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    || setweight(to_tsvector(coalesce(title,'')), 'B')  || setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') || setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B') @@ plainto_tsquery(:ss)").params(ss=searchterms).all(), key=lambda x: x.posts.count(), reverse=True)
     #results = Book.query.filter("tsv @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
     results = map(lambda x: x.info_dict(), results)
     return render_template('results.html',
@@ -231,9 +255,15 @@ def book(isbn):
     b = Book.query.filter_by(isbn=isbn).first()
     if b is None:
         return abort(404)
+    if current_user.is_authenticated():
+        user_subs = current_user.subscriptions
+        subbed = any(str(sub.isbn) == isbn for sub in user_subs)
+    else:
+        subbed = False
     return render_template('book.html',
                            book=b.info_dict(),
-                           posts=b.get_posts())
+                           posts=b.get_posts(),
+                           subbed=subbed)
 
 @app.route('/post', methods=['GET','POST'])
 @login_required
@@ -260,6 +290,7 @@ def post():
         p = Post(uid=current_user.id, timestamp=datetime.utcnow(), isbn=isbn, price=price,condition=cond,comments=comments)
         db.session.add(p)
         db.session.commit()
+        email_subbers(p)
         return redirect(url_for('book',isbn=isbn))
     return render_template('post.html',
                            post_form = form)
@@ -272,6 +303,26 @@ def delete():
     db.session.delete(post)
     db.session.commit()
     return redirect(url_for('index'))
+
+@app.route('/subscribe', methods=['POST'])
+@login_required
+def subscribe():
+    isbn = request.form['isbn']
+    email = current_user.email
+    s = Subscription(timestamp=datetime.utcnow(), user=email, isbn=isbn)
+    db.session.add(s)
+    db.session.commit()
+    return redirect(request.referrer)
+
+@app.route('/unsubscribe',methods=['POST'])
+@login_required
+def unsubscribe():
+    isbn = request.form['isbn']
+    email = current_user.email
+    s = Subscription.query.filter_by(isbn=isbn,user=email).first()
+    db.session.delete(s)
+    db.session.commit()
+    return redirect(request.referrer)
 
 @app.route('/info/<isbn>')
 @login_required
@@ -305,6 +356,7 @@ def settings():
     current_user.pref = choice
     db.session.commit()
     return redirect(url_for('index'))
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404

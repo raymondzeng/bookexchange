@@ -1,0 +1,16 @@
+<p>Dear beloved un-named user,<p><br>
+<p>A new offer has been posted for <a href="thebookexchange.herokuapp.com/book/{{ post.book.isbn }}">{{ post.book.title }}</a>!</p>
+
+<p>Click the link above or enter this link to view all offers: <a href="thebookexchange.herokuapp.com/book/{{ post.book.isbn }}">http://www.thebookexchange.herokuappcom/book/{{ post.book.isbn }}</a></p><br>
+
+<p><label>Price:</label> 
+  {% if post.price %}
+  {{ post.price }}
+  {% else %}
+  Contact Seller
+  {% endif %}</p>
+<p><label>Condition:</label> {{ post.condition }}</p>
+<p><label>Seller Comments:</label> {{ post.comments }}</p>
+<br>
+<p>-- The Book Exchange</p>
+<p>To unsubscribe from offers for this book, <a href="thebookexchange.herokuapp.com">login and manage your subscriptions.</a></p>

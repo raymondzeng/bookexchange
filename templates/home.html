@@ -7,98 +7,120 @@
 {% block content %}
 <div id="wrapper" class="container">
   <div class="row">
-    <div id="user-info" class="col-md-4 panel panel-default">
-      <p><label>Email:</label> {{ current_user.email }}</p>
-      <p><label>Facebook:</label> {{current_user.fb_url}}</p>
-      <p>
-	<label>Contact Preference:</label> 
-	{% if current_user.pref == 'e' %}
-	Email
-	{% else %}
-	Facebook
-	{% endif %}
-      </p>
-      <a id="modal-launch" data-toggle="modal" data-target="#myModal">
-	Edit Settings
-      </a>
-      
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-	  <div class="modal-content">
-	    <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="myModalLabel">Settings</h4>
-	    </div>
-	    <div class="modal-body">
-	      <form id="settings" action="/settings" method="get">
-		<label>Change Facebook URL</label>
-		<input type="text" name="myinput" class="form-control" value={{ current_user.fb_url }}>
-		<br>
-		<label>Contact Preference:</label>
+    <div class="col-md-4">
+      <div id="user-info" class="panel panel-default">
+	<p><label>Email:</label> {{ current_user.email }}</p>
+	<p><label>Facebook:</label> {{current_user.fb_url}}</p>
+	<p>
+	  <label>Contact Preference:</label> 
+	  {% if current_user.pref == 'e' %}
+	  Email
+	  {% else %}
+	  Facebook
+	  {% endif %}
+	</p>
+	<a id="modal-launch" data-toggle="modal" data-target="#myModal">
+	  Edit Settings
+	</a>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="myModalLabel">Settings</h4>
+	      </div>
+	      <div class="modal-body">
+		<form id="settings" action="/settings" method="get">
+		  <label>Change Facebook URL</label>
+		  <input type="text" name="myinput" class="form-control" value={{ current_user.fb_url }}>
+		  <br>
+		  <label>Contact Preference:</label>
 		<select name="myselect" class="form-control">
 		  <option value="e"> Email: {{current_user.email }}</option>
 		  {% if current_user.fb_url %}
 		  <option value="f"> Facebook: {{ current_user.fb_url }}</option>
 		  {% endif %}
 		</select>
-	      </form>
-	    </div>
-	    <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button id="save" type="submit" class="btn btn-primary">Save changes</button>
-	    </div>
-	  </div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-      </div><!-- /.modal -->
-    </div>
-
-    <div class="col-md-8">
-    <div id="posts" class="panel panel-default">
-      <div class="panel-heading">
-	<h3>Your Posts <small>Remove posts after a sale to prevent further communication</small></h3>
+		</form>
+	      </div>
+	      <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button id="save" type="submit" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
       </div>
-      <div class="panel-body">
-	<div>
-	  {% if current_user.posts.count() != 0 %}
-	<div id="offers">
+      
+      <div id="subs" class="panel panel-default">
+	<div class="panel-heading"><h3>Subscriptions</h3></div>
+	<div class="panel-body">
+	  {% if current_user.subscriptions.count() == 0 %}
+	  <div id="nosubs">
+	    <p class="lead">No Subscriptions</p>
+	  </div>
+	  {% else %}
 	  <table class="table table-striped">
-	    <thead>
-	      <tr>	      
-		<th>Date</th>
-		<th></th>
-		<th>ISBN</th>
-		<th>Title</th>
-		<th>Price</th>
-		<th></th>
-	      </tr>
-	    </thead>
-	    <tbody>
-	      {% for post in current_user.posts.all() %}
-	      <tr>
-		<td class="date">{{ post.timestamp }}</td>
-		<td class="image-td"><image src={{ post.book.image }} alt="No Image" class="img-thumbnail img-responseive"></image></td>
-		<td><a href="/book/{{ post.book.isbn }}">{{ post.book.isbn }}</a></td>
-		<td>{{ post.book.title }}</td>
-		{% if not post.price %}
-		<td> Contact Seller </td>
-		{% else %}
-		<td>${{ post.price }}</td>
-		{% endif %}
-		<td><button id={{ post.id }} class="btn btn-danger td-button" value="remove"><span class="glyphicon glyphicon-remove"></span></button></td>
-	      </tr>
-	      {% endfor %}
-	    </tbody>
+	    {% for sub in current_user.subscriptions %}
+	    <tr>
+	      <td><a href="/book/{{ sub.isbn }}">{{ sub.book.title|truncate(70, True) }}</a></td>
+	      <td><span isbn={{ sub.isbn }} class="glyphicon glyphicon-remove sub-x"></span></td>
+	    </tr>
+	    {% endfor %}
 	  </table>
+	  {% endif %}
 	</div>
-	{% else %}
-	<div id="noposts">
-	  <h3 class="lead">No Posts</h3>
-	</div>
-	{% endif %}
-	</div>
-      {% endblock %}
       </div>
     </div>
+    
+    <div class="col-md-8">
+      <div id="posts" class="panel panel-default">
+	<div class="panel-heading">
+	  <h3>Your Posts <small>Remove posts after a sale to prevent further communication</small></h3>
+	</div>
+	<div class="panel-body">
+	  <div>
+	    {% if current_user.posts.count() != 0 %}
+	    <div id="offers">
+	      <table class="table table-striped">
+		<thead>
+		  <tr>	      
+		    <th>Date</th>
+		    <th></th>
+		    <th>ISBN</th>
+		    <th>Title</th>
+		    <th>Price</th>
+		<th></th>
+		  </tr>
+		</thead>
+		<tbody>
+		  {% for post in current_user.posts.all() %}
+		  <tr>
+		    <td class="date">{{ post.timestamp }}</td>
+		    <td class="image-td"><image src={{ post.book.image }} alt="No Image" class="img-thumbnail img-responseive"></image></td>
+		    <td><a href="/book/{{ post.book.isbn }}">{{ post.book.isbn }}</a></td>
+		    <td>{{ post.book.title }}</td>
+		    {% if not post.price %}
+		    <td> Contact Seller </td>
+		    {% else %}
+		    <td>${{ post.price }}</td>
+		    {% endif %}
+		    <td><button id={{ post.id }} class="btn btn-danger td-button" value="remove"><span class="glyphicon glyphicon-remove"></span></button></td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	      </table>
+	    </div>
+	    {% else %}
+	    <div id="noposts">
+	      <h3 class="lead">No Posts</h3>
+	    </div>
+	    {% endif %}
+	  </div>
+	  {% endblock %}
+	</div>
+      </div>
     </div>
   </div>
 </div>

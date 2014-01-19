@@ -1,0 +1,9 @@
+<p>Dear beloved un-named user,<p>
+<br>
+<p>A new offer has been posted for <a href="thebookexchange.herokuapp.com/book/{{ book.isbn }}">{{ book.title }}!</a>
+
+<p>Click the link above or enter this link to view all offers: <a href="thebookexchange.herokuapp.com/book/{{ book.isbn }}">http://www.thebookexchange.herokuappcom/book/{{ book.isbn }}</a>
+
+<br>
+<p>-- The Book Exchange</p>
+<p>To unsubscribe from offers for this book, <a href="thebookexchange.herokuapp.com">login and manage your subscriptions at</a></p>

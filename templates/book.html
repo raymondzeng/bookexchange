@@ -36,14 +36,32 @@
       {% endif %}
     </div>
     <div class="col-md-2">
-      <form id="sell-redirect" action="/post" method="GET">
-	<input type="hidden" name="isbn" value={{ book['isbn'] }}>
-	{% if current_user.is_authenticated() %}
-	<input type="submit" class="btn btn-success pull-right" value="Sell This Book">
+      {% if current_user.is_authenticated() %}
+      <div id="options">
+	<form id="sell" action="/post" method="GET">
+	  <input type="hidden" name="isbn" value={{ book['isbn'] }}>
+	  <input type="submit" class="btn btn-success opt" value="Sell This Book">
+	</form>
+	{% if subbed %}
+	<form id="unsubscribe" action="/unsubscribe" method="POST">
+	  <input type="hidden" name="isbn" value={{ book['isbn'] }}>
+	  <button type="submit" class="btn btn-danger opt"><span class="glyphicon glyphicon-envelope"></span> Unsubscribe</button>
+	</form>
 	{% else %}
-	<input type="submit" class="btn btn-primary pull-right" value="Log in to Sell This Book">      
+	<form id="subscribe" action="/subscribe" method="POST">
+	  <input type="hidden" name="isbn" value={{ book['isbn'] }}>
+	  <button type="submit" class="btn btn-default opt" value="Subscribe"><span class="glyphicon glyphicon-envelope"></span> Subscribe</button>
+	  <span class="help-block">Get an email when someone posts a new offer for this book</span>
+	</form>
 	{% endif %}
+      </div>
+      {% else %}
+      <form action="/login" method="GET">
+	<input type="hidden" name="isbn" value={{ book['isbn'] }}>
+	<input type="hidden" name="next" value="/book/{{ book['isbn'] }}">
+	<input type="submit" class="btn btn-primary pull-right login-btn" value="Log in to Sell or Subscribe">     
       </form>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -92,3 +110,4 @@
   {% endif %}
 </div>
 {% endblock %}
+

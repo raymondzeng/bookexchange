@@ -1,0 +1,3 @@
+Dear beloved unnamed user,
+
+     A new offer has been posted for {{ book.title }}! 

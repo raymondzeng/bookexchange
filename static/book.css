@@ -26,7 +26,13 @@
     margin: 0;
 }
 
-#sell-redirect {
+#options {
+    margin-top:50px;
+}
+.opt{
+    width:124px;
+}
+.login-btn {
     margin-top: 75px;
 }
 #posts {

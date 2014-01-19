@@ -27,6 +27,12 @@ $(document).ready(function(){
 	    $('#deletepost').submit();
 	}
     });
+
+    $('.sub-x').click(function(){
+	$(document.body).append('<form id="unsub" action="/unsubscribe" method="POST"><input type="hidden" name="isbn" value="' + $(this).attr('isbn') + '"></form>')
+	$('#unsub').submit();
+    });
+
     $('#isbn').on('input',function(){
 	if($(this).val().trim() == '')
 	    return;
