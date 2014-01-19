@@ -38,6 +38,9 @@ $(document).ready(function(){
 	    return;
 	getPreview();
     });
+    $('.fblink').click(function(){
+	window.open($(this).attr('link'));
+    });
     
     if($('#isbn').val() != '')
 	getPreview();

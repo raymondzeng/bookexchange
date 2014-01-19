@@ -48,3 +48,7 @@
     padding: 10px;
     border: 1px #ddd solid;
 }
+
+.fblink:hover {
+    cursor: pointer;
+}
