@@ -37,9 +37,14 @@
 		  <br>
 		  <label>Contact Preference:</label>
 		<select name="myselect" class="form-control">
+		  {% if current_user.pref == 'e' %}
 		  <option value="e"> Email: {{current_user.email }}</option>
 		  {% if current_user.fb_url %}
 		  <option value="f"> Facebook: {{ current_user.fb_url }}</option>
+		  {% endif %}
+		  {% else %}
+		  <option value="f"> Facebook: {{ current_user.fb_url }}</option>		  	
+		  <option value="e"> Email: {{current_user.email }}</option>
 		  {% endif %}
 		</select>
 		</form>
