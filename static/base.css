@@ -4,11 +4,9 @@
     }
 }
 
-body {
-    padding: 10px;
-    padding-top: 50px;
+.navbar {
+    margin-bottom: 10px;
 }
-
 .navbar-btn {
     width: 100px;
     margin-right: 20px;

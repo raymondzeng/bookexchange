@@ -1,7 +1,6 @@
 body {
     padding: 10px;
-    padding-top: 50px;
 }
-#big-search, #wrapper, .panel-default {
+#big-search {
     width: 100%;
 }
