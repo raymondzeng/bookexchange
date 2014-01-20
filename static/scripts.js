@@ -83,30 +83,6 @@ $(document).ready(function(){
 	    $('#resa'+(currentPage)+' a').click();
 	}
     });    
-
-
-
-    var move = function() {
-        var st = $(window).scrollTop() + 50;
-        var ot = $("#scroll-anchor").offset().top;
-        var s = $(".pagination");
-        if(st > ot) {
-            s.css({
-                position: "fixed",
-                top: "50px"
-            });
-	    $("#scroll-anchor").css('height', '51px');
-        } else {
-            if(st <= ot) {
-                s.css({
-                    position: "relative",
-                    top: "auto"
-                });
-            }
-        }
-    };
-    $(window).scroll(move);
-    move();
 });
 
 function getPreview(){

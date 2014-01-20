@@ -2,6 +2,7 @@
 
 {% block sheets %}
 <link href="/static/results.css" rel="stylesheet">
+<script src="/static/results.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -18,13 +19,13 @@
     </div>
     {% else %}
     <div id="scroll-anchor">
-    <ul class="pagination">
-      <li id="resprev"><a>&laquo;</a></li>
-      {% for n in range((results|count / 10)|round(0,'ceil')|int) %}
-      <li id="resa{{ n + 1 }}"><a href="" class="resa" num={{ n + 1 }}>{{ n + 1 }}</a></li>
-      {% endfor %}
-      <li id="resnext"><a>&raquo;</a></li>
-    </ul>
+	<ul class="pagination pagination-lg">
+	  <li id="resprev"><a>&laquo;</a></li>
+	  {% for n in range((results|count / 10)|round(0,'ceil')|int) %}
+	  <li id="resa{{ n + 1 }}"><a href="" class="resa" num={{ n + 1 }}>{{ n + 1 }}</a></li>
+	  {% endfor %}
+	  <li id="resnext"><a>&raquo;</a></li>
+	</ul>
     </div>
     {% endif %}
    
