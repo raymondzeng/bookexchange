@@ -1,9 +1,7 @@
 body {
     padding: 10px;
+    padding-top: 50px;
 }
-.navbar {
-    width: 100%;
-}
-#big-search {
+#big-search, #wrapper, .panel-default {
     width: 100%;
 }
