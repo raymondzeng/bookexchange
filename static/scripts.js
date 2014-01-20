@@ -38,15 +38,52 @@ $(document).ready(function(){
 	    return;
 	getPreview();
     });
-    $('.fblink').click(function(){
-	window.open($(this).attr('link'));
-    });
-    
     if($('#isbn').val() != '')
 	getPreview();
     $('#save').click(function(){
 	$('#settings').submit();
     });
+
+    
+    var num = 1;
+    $('.restable').each(function(){
+	$(this).attr('id',"res"+num);
+	$(this).hide();
+	num++;
+    });    
+
+    var tables = $('tables').length;
+    $('#res1').show();
+    $('#resa1').addClass('active');
+    $(".resa").click(function (e) {
+        e.preventDefault();
+	n = $(this).attr('num');
+        $("#res" + n).show().siblings('table').hide();
+	$('.pagination li').each(function() {
+	    $(this).removeClass('active');
+	});
+	$('#resa' + n).addClass('active');
+    });
+    
+    $('#resprev').click(function(){
+	currentPage = $('[class=active]').attr('id')[4];
+	if (currentPage == 1)
+	    return;
+	else{
+	    $('#resa' + (currentPage - 1) + " a").click();
+	}
+    });
+
+    $('#resnext').click(function(){
+	currentPage = $('[class=active]').attr('id')[4];
+	if (currentPage == tables)
+	    return;
+	else{
+	    currentPage++;
+	    $('#resa'+(currentPage)+' a').click();
+	}
+    });
+
 });
 
 function getPreview(){

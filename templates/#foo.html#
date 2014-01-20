@@ -1,0 +1,11 @@
+    {% for slice in results|slice((results|count / 10)|round(0,'ceil')|int) %}
+
+
+
+    <ul class="pagination">
+      <li><a href="prev">&laquo;</a></li>
+      {% for n in range((results|count / 10)|round(0,'ceil')|int) %}
+      <li><a href="" scnum={{ n + 1 }}>{{ n + 1 }}</a></li>
+      {% endfor %}
+      <li><a href="next">&raquo;</a></li>
+    </ul>

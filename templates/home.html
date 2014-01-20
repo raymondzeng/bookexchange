@@ -10,7 +10,7 @@
     <div class="col-md-4">
       <div id="user-info" class="panel panel-default">
 	<p><label>Email:</label> {{ current_user.email }}</p>
-	<p><label>Facebook:</label> {{current_user.fb_url}}</p>
+	<p><label>Facebook:</label> http://www.facebook.com/{{current_user.fb_url}}</p>
 	<p>
 	  <label>Contact Preference:</label> 
 	  {% if current_user.pref == 'e' %}
@@ -33,7 +33,10 @@
 	      <div class="modal-body">
 		<form id="settings" action="/settings" method="get">
 		  <label>Change Facebook URL</label>
-		  <input type="text" name="myinput" class="form-control" value={{ current_user.fb_url }}>
+		  <div class="input-group">
+		    <span class="input-group-addon">http://www.facebook.com</span>
+		    <input type="text" name="myinput" class="form-control" value={{ current_user.fb_url }}>
+		  </div>
 		  <br>
 		  <label>Contact Preference:</label>
 		<select name="myselect" class="form-control">

@@ -1,10 +1,5 @@
-#filter {
-    float: left;
-    width: 300px;
-    height: 100%;
-    text-align: center;
-    position: fixed;
-    border-right: 1px #ddd solid;
+#resprev, #resnext:hover {
+    cursor: pointer;
 }
 #results-cont {
     height: 100%;
@@ -12,7 +7,6 @@
 
 .image-td {
     width: 130px;
-    height: 175px;
     text-align: center;
 }
 .image-td p{
@@ -30,6 +24,10 @@ h5 {
     margin-left: 10px;
 }
 
+.pagination {
+    margin-left: 10px;
+    margin-top: 10px;
+}
 #tips {
     font-size: 20px;
     margin: 20px;
