@@ -17,6 +17,7 @@
       </ul>
     </div>
     {% else %}
+    <div id="scroll-anchor">
     <ul class="pagination">
       <li id="resprev"><a>&laquo;</a></li>
       {% for n in range((results|count / 10)|round(0,'ceil')|int) %}
@@ -24,6 +25,7 @@
       {% endfor %}
       <li id="resnext"><a>&raquo;</a></li>
     </ul>
+    </div>
     {% endif %}
    
     {% for slice in results|slice((results|count / 10)|round(0,'ceil')|int) %}
