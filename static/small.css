@@ -1,6 +1,9 @@
-body {
-    padding: 10px;
-}
 #big-search {
+    width: 100%;
+}
+.navbar {
+    width: 100%;
+}
+.col-md-* {
     width: 100%;
 }
