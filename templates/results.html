@@ -8,13 +8,13 @@
 {% block content %}
 <div id="wrapper">
   <div id="results-cont">
-    <h4>Showing results for &quot;{{ query }}&quot;  <small>{{ results|count }} item(s)</h4>
+    <h5>Showing results for &quot;{{ query }}&quot;  <small>{{ results|count }} item(s)</h5>
     {% if results|count == 0 %}
     <div id="tips">
       <p>Suggestions:</p>
       <ul>
-	<li>Course codes must be the full code e.g. econ0110, csci0160 (no space)</li>
 	<li>Entering an ISBN-13 is guaranteed to return a book if it's in our database - if it's not, it means no one's selling it</li>
+	<li>Course codes must be the full code e.g. econ0110, csci0160 (no space)</li>
       </ul>
     </div>
     {% else %}
@@ -28,8 +28,7 @@
 	</ul>
     </div>
     {% endif %}
-    
-    {% if results|count != 0 %}
+   
     {% for slice in results|slice((results|count / 10)|round(0,'ceil')|int) %}
     <table class="table restable">
       {% for book in slice %}
@@ -70,7 +69,6 @@
       {% endfor %}
     </table>
     {% endfor %}
-    {% endif %}
   </div>
 </div>
 {% endblock %}
