@@ -1,6 +1,9 @@
 body {
     text-align: center;
 }
+#about {
+    text-align: left;
+}
 #big-search {
     top: 300px;
     width: 700px;

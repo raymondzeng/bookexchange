@@ -27,6 +27,9 @@
       </div>
       
       <div class="collapse navbar-collapse" id="nav-collapse">
+	<a id="about-launch" class="navbar-left" data-toggle="modal" data-target="#aboutModal">
+	   About
+	</a>
 	<form id="nav-search" class="navbar-form navbar-left" action="/search" role="search">
 	  <div class="form-group">
 	    <input type="text" class="form-control" placeholder="Search" name="q">
@@ -60,7 +63,36 @@
     {%- endfor -%}
     {%- endif -%}
     {%- endwith -%}
-    
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-body">
+	    <div id="about">
+	      <h2>About</h2>
+	      
+	      <p>The Book Exchange connects Brown students looking to buy and sell used books. No middle man, no bookstore, just Brown student to Brown student.</p>
+	      
+	      <p>Buyers: search by ISBN-13, title, author or course number to find the books you need, and see who’s offering to sell them. Then, connect with that person to meet up and exchange the book. And if you don’t see an offer you like, subscribe to that book, and receive an email when new offers are posted.</p>
+	      
+	      <p>Sellers: simply list your books, name your price, describe the condition, and add any comments. Then, wait for the offers to come rolling in.</p>
+	      
+	      <p>Questions? Bugs? Feedback? Good jokes you want to pass on? Contact: <a href="mailto:bookexchangekeeper@gmail.com">bookexchangekeeper@gmail.com</a></p>
+	      
+	      <h2>What We Don’t Do</h2>
+	      
+	      <ul>
+		<li>We do not facilitate the transfer of currency, goods, or services. It’s up to buyers to contact sellers and arrange sales.</li>
+		
+		<li>We do not guarantee the quality of the books. It’s up to you to check the books out before buying them. Any disagreements should be worked out between buyer and seller.</li>
+	      </ul>
+	    </div>
+	  </div>
+	  <div class="modal-footer">
+	    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	  </div>
+	</div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     {%- block content -%}{%- endblock -%}
     
   </body>

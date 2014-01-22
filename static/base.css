@@ -8,7 +8,16 @@ body {
     padding: 10px;
     padding-top: 50px;
 }
+#about-launch{
+    margin-top: 16px;
+}
+#about-launch:hover {
+    cursor: pointer;
+}
 
+#aboutModal h2 {
+    text-align: center;
+}
 .navbar-btn {
     width: 100px;
     margin-right: 20px;

@@ -188,7 +188,7 @@ def index():
     if not current_user.is_authenticated():
         return render_template('index.html')
     return render_template('home.html')
-    
+
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if current_user is not None and current_user.is_authenticated():
