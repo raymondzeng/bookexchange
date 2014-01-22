@@ -1,6 +1,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.5, minimum-scale=1.5">
+    <meta name="description" content="The Book Exchange connects students looking to buy and sell used books. No middle man, no bookstore, just student to student">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="/static/scripts.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
@@ -15,6 +16,14 @@
     {%- endif -%}
   </head>
   <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="navbar-header">
 	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-collapse">
@@ -84,7 +93,9 @@
 		<li>We do not facilitate the transfer of currency, goods, or services. It’s up to buyers to contact sellers and arrange sales.</li>
 		
 		<li>We do not guarantee the quality of the books. It’s up to you to check the books out before buying them. Any disagreements should be worked out between buyer and seller.</li>
+
 	      </ul>
+	      <h2><div class="fb-share-button" data-href="http://thebookexchange.herokuapp.com" data-type="icon_link"></div></h2>
 	    </div>
 	  </div>
 	  <div class="modal-footer">
