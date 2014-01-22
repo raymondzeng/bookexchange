@@ -60,6 +60,38 @@
 	</div><!-- /.modal -->
       </div>
       
+      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Edit Post</h3>
+	      </div>
+	      <div class="modal-body">
+		<form id="editpost" action="/editpost" method="post">
+		  <input type="hidden" id="editid" name="editid">
+		  <label>New Price</label>
+		  <div class="input-group">
+		    <span class="input-group-addon">$</span>
+		    <input type="text" name="editprice" class="form-control">
+		  </div>
+		    <span class="help-block">Enter '0' to set 'Contact Seller'</span>
+
+		  <label>New Comments</label>
+		  <div class="input-group">
+		    <textarea type="text" name="editcomments" class="form-control"></textarea>
+		  </div>
+		  <span class="help-block">Enter 'NONE' to clear comments</span>
+
+		  <button id="editsave" type="submit" class="btn btn-primary">Update</button>
+		</form>
+	      </div>
+	      <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
       <div id="subs" class="panel panel-default">
 	<div class="panel-heading"><h3>Subscriptions</h3></div>
 	<div class="panel-body">
@@ -113,7 +145,12 @@
 		    {% else %}
 		    <td>${{ post.price }}</td>
 		    {% endif %}
-		    <td><button id={{ post.id }} class="btn btn-danger td-button" value="remove"><span class="glyphicon glyphicon-remove"></span></button></td>
+		    <td>
+		      <button id={{ post.id }} class="btn btn-danger td-button" value="remove"><span class="glyphicon glyphicon-remove"></span></button>
+		      <a id="modal-launch" data-toggle="modal" data-target="#editModal">
+			<button pid={{ post.id }} class="btn btn-default edit-button" value="edit"><span class="glyphicon glyphicon-pencil"></span></button>
+		      </a>
+
 		  </tr>
 		  {% endfor %}
 		</tbody>

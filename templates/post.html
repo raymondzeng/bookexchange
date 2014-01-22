@@ -33,7 +33,10 @@
 		<span>{{ error }}</span>
 		{% endfor %}
 	      </label>
-	      {{ post_form.price(class_='form-control') }}
+	      <div class="input-group">
+		<span class="input-group-addon">$</span>
+		{{ post_form.price(class_='form-control') }}
+	      </div>
 	      <p class="help-block">If price left blank, 'Contact Seller' will be shown</p>
 	    </div>
 	    
@@ -45,7 +48,7 @@
 		{% endfor %}
 	      </label>
 	      {{ post_form.courses(class_='form-control') }}
-	      <p class="help-block">Please enter complete course code e.g. econ0110</p>
+	      <p class="help-block">If the course you used this book in is not listed in the preview panel, enter the complete course code (e.g. csci0190, php1350) to help people find this book</p>
 	    </div>
 	    <div class="form-group">
 	      <label for="condition">
@@ -89,15 +92,7 @@
 	  </div>
 	</div>
       </div>
-    </div><!-- end col-->
-
-    <!--div class="col-md-4">
-      <div id="prev-list" class="panel panel-default">
-	<div class="panel-heading"><h3>2. Confirm</h3></div>
-	<div class="panel-body">
-	</div>
-      </div>
-    </div><!--end col-->
+    </div>
   </div>
 </div>
 {% endblock %}

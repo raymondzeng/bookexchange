@@ -294,7 +294,12 @@ def post():
             b = Book(isbn=isbn, title=info['title'], author=info['author'], amazon_url=info['url'], image=image, courses=[courses])
             db.session.add(b)
             db.session.commit()
-
+        else:
+            b = Book.query.get(isbn)
+            old_courses = list(b.courses)
+            old_courses.append(courses)
+            b.courses = list(set(old_courses))
+            db.session.commit()
         p = Post(uid=current_user.id, timestamp=datetime.utcnow(), isbn=isbn, price=price,condition=cond,comments=comments)
         db.session.add(p)
         db.session.commit()
@@ -308,8 +313,27 @@ def post():
 def delete():
     pid = request.form['id']
     post = Post.query.get(pid)
-    db.session.delete(post)
-    db.session.commit()
+    if post.seller.id == current_user.id:
+        db.session.delete(post)
+        db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/editpost', methods=['POST'])
+@login_required
+def edit_post():
+    price = request.form['editprice']
+    comments = request.form['editcomments']
+    pid = request.form['editid']
+    post = Post.query.get(pid)
+    if post.seller.id == current_user.id:
+        if price != '' and price.isdigit():
+            post.price = price
+        if comments != '':
+            if comments == 'NONE':
+                comments = ''
+            post.comments = comments
+        post.timestamp = datetime.utcnow()
+        db.session.commit()
     return redirect(url_for('index'))
 
 @app.route('/subscribe', methods=['POST'])
@@ -343,7 +367,8 @@ def info(isbn):
         return jsonify(
             title=i.title,
             image=i.image,
-            author=i.author)
+            author=i.author,
+            courses=i.courses)
     time.sleep(1)
     img = get_amazon_image(isbn)
     time.sleep(1)
@@ -355,7 +380,7 @@ def info(isbn):
             author=info['author'])
     return jsonify(title=None)
 
-@app.route('/settings', methods=['get','POST'])
+@app.route('/settings', methods=['GET','POST'])
 @login_required
 def settings():
     choice = request.args.get('myselect')

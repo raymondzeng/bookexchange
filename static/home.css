@@ -49,3 +49,15 @@ h3 {
 .input-group {
     width: 100%;
 }
+
+.edit-button {
+    margin-top: 10px;
+}
+
+#editModal .btn {
+    margin-top: 10px;
+}
+
+#editModal label {
+    margin-top: 10px;
+}

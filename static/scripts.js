@@ -85,6 +85,10 @@ $(document).ready(function(){
 	    $('#resa'+(currentPage)+' a').click();
 	}
     });    
+
+    $('.edit-button').click(function(){
+	$('#editid').attr('value', $(this).attr('pid'));
+    });
 });
 
 function getPreview(){
@@ -102,7 +106,7 @@ function getPreview(){
 	else{
 	    $('#bookimg').attr('src',data.image);
 	    $('#imgp').css('display','none');
-	    var title, author;
+	    var title, author, courses;
 	    if(data.title == null)
 		title = 'No Title Available';
 	    else
@@ -113,9 +117,14 @@ function getPreview(){
 		for(var i = 1; i < data.author.length; i++)
 		    author = author.concat(' | '+data.author[i]);
 	    }
-	    console.log(author);
-	    $('#prev-info').html('<label>'+title+'</label><p>'+author+'</p>');
-	}
+	    courses = ''
+	    if(data.courses != null){
+		courses = data.courses[0];
+		for(var i = 1; i < data.courses.length; i++)
+		    courses = courses.concat(' | '+data.courses[i]);
+	    }
+	$('#prev-info').html('<label>'+title+'</label><p>'+author+'</p>'+'<p>Courses: '+courses+'</p>');
+    }
     });
 }
 
