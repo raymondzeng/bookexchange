@@ -17,19 +17,23 @@
     </div>
     <div class="col-md-8">	
       <h4>{{ book['title'] }}</h4>
+      {% if book['author'] %}
       <p> by 
 	{{ book['author'][0] }}
 	{% for author in book['author'][1:] %}
 	| {{ author }}
 	{% endfor %}
       </p>
+      {% endif %}
       <p>ISBN-13: {{ book['isbn'] }}</p>
       <p>
 	Courses:
+	{% if book['courses'] %}
 	{{ book['courses'][0] }}
 	{% for course in book['courses'][1:] %}
 	| {{ course }}
 	{% endfor %}
+	{% endif %}
       </p>
       {% if book['amazon_url'] %}
       <a href={{ book['amazon_url'] }} target="_blank">Click here to view on Amazon</a>

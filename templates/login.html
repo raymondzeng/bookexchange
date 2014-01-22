@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block content %}
-<div id="wrapper">
-  <div id="login" class="panel panel-default">
+<div id="wrapper" class="row">
+  <div id="login" class="col-md-4 panel panel-default">
     <div class="panel-body">
       <form class="form-horizontal" method="post" name="login" role="form">
 	{{ login_form.hidden_tag() }}
@@ -46,7 +46,7 @@
       </form>
     </div>
   </div>
-  <div id="errors">
+  <div id="errors" class="col-md-2">
     <div id="email-error">
       <label>
       {% for error in login_form.errors.email %}

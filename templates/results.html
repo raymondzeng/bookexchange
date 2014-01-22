@@ -46,17 +46,21 @@
 	  <p>ISBN: {{ book['isbn'] }}</p>
 	  <p>
 	    Authors:
+	    {% if book['author'] %}
 	    {{ book['author'][0] }}
 	    {% for author in book['author'][1:] %}
 	    | {{ author }}
 	    {% endfor %}
+	    {% endif %}
 	  </p>
 	  <p>
 	    Courses:
+	    {% if book['courses'] %}
 	    {{ book['courses'][0] }}
 	    {% for course in book['courses'][1:] %}
 	    | {{ course }}
 	    {% endfor %}
+	    {% endif %}
 	  </p>
 	  <p {% if book['post_count'] > 0 %} 
 	    class="text-success">
