@@ -126,10 +126,16 @@ class RegisterForm(Form):
     def validate_email(form, field):
         user = User.query.filter_by(
             email=field.data).first()
-        
         if user is not None:
             raise ValidationError('Email already in use')
 
+    def validate_fb_url(form, field):
+        s = field.data.find('facebook.com')
+        if s == -1:
+            field.data = ''
+        else:
+            url = 'http://www.' + field.data[s:]
+            field.data = url
 
 class PostForm(Form):
     isbn = TextField('isbn', validators = [Required()])
@@ -354,6 +360,11 @@ def info(isbn):
 def settings():
     choice = request.args.get('myselect')
     fb = request.args.get('myinput')
+    i = fb.find('facebook.com')
+    if i == -1:
+        fb = ''
+    else:
+        fb = "http://www." + fb[i:]
     current_user.fb_url = fb
     current_user.pref = choice
     db.session.commit()

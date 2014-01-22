@@ -44,7 +44,7 @@
       </div>
       
       <div class="page-header">
-	<h4>Optional  <small>Alternative way(s) to be contacted</small></h4>
+	<h4>Optional  <small>Alternative way to be contacted instead of email</small></h4>
       </div>
       
       <div class="form-group">
@@ -54,9 +54,8 @@
 	  <span>{{ error }}</span>
 	  {% endfor %}
 	</label>
-	<div class="input-group">
-	  <span class="input-group-addon">http://www.facebook.com/</span>
-	  {{ register_form.fb_url(class_='form-control', placeholder="username") }}
+	<div class="form-group">
+	  {{ register_form.fb_url(class_='form-control', placeholder="Copy and Paste your Facebook URL") }}
 	</div>
       </div>
       <input class="btn btn-success" type="submit" value="Register">

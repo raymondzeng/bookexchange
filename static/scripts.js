@@ -38,8 +38,10 @@ $(document).ready(function(){
 	    return;
 	getPreview();
     });
+    
     if($('#isbn').val() != '')
 	getPreview();
+    
     $('#save').click(function(){
 	$('#settings').submit();
     });
