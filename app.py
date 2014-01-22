@@ -11,6 +11,7 @@ from datetime import datetime
 from amazon import get_amazon_info, get_amazon_image
 import time
 from threading import Thread
+import requests
 
 
 app = Flask(__name__)
@@ -128,6 +129,13 @@ class RegisterForm(Form):
             email=field.data).first()
         if user is not None:
             raise ValidationError('Email already in use')
+        mailgun = requests.get(
+            "https://api.mailgun.net/v2/address/validate",
+            auth=("api", "pubkey-0qte70295e2fb293-3prii8dcijm0cu3"),
+            params={"address": field.data})
+        if not mailgun.json()['is_valid']:
+            raise ValidationError('Invalid Email')
+
 
     def validate_fb_url(form, field):
         s = field.data.find('facebook.com')
@@ -229,7 +237,7 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         user = register_user(form)
-        login_user(user, remember=True)
+        login_user(user, remember=False)
         return redirect(url_for('index'))
 
     return render_template('register.html',
