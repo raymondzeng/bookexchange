@@ -134,7 +134,7 @@ class RegisterForm(Form):
         if s == -1:
             field.data = ''
         else:
-            url = 'http://www.' + field.data[s:]
+            url = field.data[s:]
             field.data = url
 
 class PostForm(Form):
@@ -364,7 +364,7 @@ def settings():
     if i == -1:
         fb = ''
     else:
-        fb = "http://www." + fb[i:]
+        fb = fb[i:]
     current_user.fb_url = fb
     current_user.pref = choice
     db.session.commit()

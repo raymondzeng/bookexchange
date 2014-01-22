@@ -45,3 +45,7 @@ h3 {
     color: rgb(217, 83, 97);
     cursor: pointer;
 }
+
+.input-group {
+    width: 100%;
+}

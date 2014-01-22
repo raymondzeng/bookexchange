@@ -101,7 +101,7 @@
 	  {% if post.seller.pref == 'e' %}
 	  <td><a href="mailto:{{ post.seller.email }}">Email</a></td>
 	  {% else %}
-	  <td><a class="fblink" href="{{ post.seller.fb_url }}" target="_blank">Facebook</a></td>
+	  <td><a class="fblink" href="http://www.{{ post.seller.fb_url }}" target="_blank">Facebook</a></td>
 	  {% endif %}
 	</tr>
 	{% endfor %}
