@@ -28,7 +28,7 @@
 	</ul>
     </div>
     {% endif %}
-   
+    {% if results|count != 0 %}
     {% for slice in results|slice((results|count / 10)|round(0,'ceil')|int) %}
     <table class="table restable">
       {% for book in slice %}
@@ -69,6 +69,7 @@
       {% endfor %}
     </table>
     {% endfor %}
+    {% endif %}
   </div>
 </div>
 {% endblock %}
