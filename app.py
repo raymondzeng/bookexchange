@@ -311,6 +311,8 @@ def post():
         cond = form.condition.data
         comments = form.comments.data
         courses = form.courses.data.strip().replace(' ','').upper()
+        if len(courses) > 9:
+            courses = ''
         if not Book.query.get(isbn):
             info = get_amazon_info(isbn)
             image = get_amazon_image(isbn)
