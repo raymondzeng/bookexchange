@@ -12,6 +12,7 @@ from amazon import get_amazon_info, get_amazon_image
 import time
 from threading import Thread
 import requests
+import re
 
 
 app = Flask(__name__)
@@ -257,8 +258,22 @@ def search():
     if searchterms is None:
         return redirect(url_for('index'))
     searchterms = process_string(searchterms)
-    results = sorted(Book.query.filter("setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    || setweight(to_tsvector(coalesce(title,'')), 'B')  || setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') || setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B') @@ plainto_tsquery(:ss)").params(ss=searchterms).all(), key=lambda x: x.posts.count(), reverse=True)
+    results = Book.query.filter("setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    || setweight(to_tsvector(coalesce(title,'')), 'B')  || setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') || setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B') @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
     #results = Book.query.filter("tsv @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
+    
+    # for flexible course code search: ABCD##, ABCD### -> ABCD0###
+    regex_s = re.search('[A-Z]{4}\d{2,3}',str(searchterms).upper())
+    if regex_s is not None:
+        s_num = re.search('\d{2,3}', regex_s.group()).group()
+        if len(s_num) == 2:
+            s_num = s_num + '0'
+        s_num = regex_s.group()[:4] + '0' + s_num
+        course_search = Book.query.filter("to_tsvector(coalesce(array_to_string(courses,', '),'')) @@ plainto_tsquery(:ss)").params(ss=s_num).all()
+        if course_search:
+            if results:
+                results = list(set(course_search.extend(results)))
+            results = course_search
+    results = sorted(results, key=lambda x: x.posts.count(), reverse=True)
     results = map(lambda x: x.info_dict(), results)
     return render_template('results.html',
                            results = results,
