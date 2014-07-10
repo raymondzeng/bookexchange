@@ -1,5 +1,0 @@
-import urllib2
-
-data = urllib2.urlopen(http://brown.verbacompare.com/compare/departments/?term=5634)
-
-print data

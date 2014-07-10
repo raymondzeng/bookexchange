@@ -1,188 +1,37 @@
-import os, json
+import os, json, re
 from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session, abort
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required, user_logged_in
-from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.mail import Mail, Message
-from sqlalchemy.dialects.postgresql import ARRAY, TSVECTOR
-from flask_wtf import Form
-from wtforms import TextField, BooleanField, PasswordField, SelectField, TextAreaField, ValidationError
-from wtforms.validators import Required, Length, EqualTo, Email
 from datetime import datetime
 from amazon import get_amazon_info, get_amazon_image
-import time
+from time import time
 from threading import Thread
-import requests
-import re
 
+from models import db, User, Book, Post, Subscription
+from forms import LoginForm, RegisterForm, PostForm
 
 app = Flask(__name__)
 app.config.from_object('config')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] 
-sender = os.environ['DEF_SENDER']
 
-db = SQLAlchemy(app)
+db.init_app(app)
+
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = '/login'
 
 mail = Mail(app)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120))
-    fb_url = db.Column(db.Text, default=None)
-    pref = db.Column(db.Text, default='e')
-    posts = db.relationship('Post', backref='seller', lazy='dynamic')
-    subscriptions = db.relationship('Subscription', backref='subscriber', lazy='dynamic')
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return unicode(self.id)
-
-    def __repr__(self):
-        return '<User %r>' % (self.email)
-
-
-class Book(db.Model):
-    isbn = db.Column(db.BigInteger, primary_key=True, unique=True)
-    title = db.Column(db.Text)
-    author = db.Column(ARRAY(db.Text))
-    amazon_url = db.Column(db.Text)
-    image = db.Column(db.Text)
-    courses = db.Column(ARRAY(db.String(140)))
-    tsv = db.Column(TSVECTOR)
-    posts = db.relationship('Post', backref='book', lazy='dynamic')
-    subscribers = db.relationship('Subscription', backref='book', lazy='dynamic')
-    def info_dict(self):
-        return {'isbn': self.isbn,
-                'title': self.title,
-                'author': self.author,
-                'amazon_url': self.amazon_url,
-                'image': self.image,
-                'courses': self.courses,
-                'post_count': self.posts.count()}
-
-    def get_posts(self):
-        return self.posts
-
-
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Integer, db.ForeignKey('user.id'))
-    timestamp = db.Column(db.DateTime)
-    isbn = db.Column(db.BigInteger, db.ForeignKey('book.isbn'))
-    price = db.Column(db.Numeric)
-    condition = db.Column(db.Text)
-    comments = db.Column(db.Text)
-    
-    
-class Subscription(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime)
-    user = db.Column(db.String(120), db.ForeignKey('user.email'))
-    isbn = db.Column(db.BigInteger, db.ForeignKey('book.isbn'))
-
-
-class LoginForm(Form):
-    email = TextField('email', validators = [Required(), Email()])
-    password = PasswordField('password', validators = [Required()])
-    remember_me = BooleanField('remember_me', default = False)
-
-    def validate(self):
-        rv = Form.validate(self)
-        if not rv:
-            return False
-
-        user = User.query.filter_by(
-            email=self.email.data).first()
-        
-        if user is None:
-            self.email.errors.append('Invalid email')
-            return False
-
-        if not user.password == self.password.data:
-            self.password.errors.append('Invalid password')
-            return False
-
-        self.user = user
-        return True
-
-
-class RegisterForm(Form):
-    email = TextField('email', validators = [Required(), Email()])
-    password = PasswordField('password', validators = [Required()])
-    confirm = PasswordField('confirm', validators = [
-        Required(),
-        EqualTo('password', message='Passwords must match')])
-    fb_url = TextField('facebook')
-
-    def validate_email(form, field):
-        user = User.query.filter_by(
-            email=field.data).first()
-        if user is not None:
-            raise ValidationError('Email already in use')
-        mailgun = requests.get(
-            "https://api.mailgun.net/v2/address/validate",
-            auth=("api", "pubkey-0qte70295e2fb293-3prii8dcijm0cu3"),
-            params={"address": field.data})
-        if not mailgun.json()['is_valid']:
-            raise ValidationError('Invalid Email')
-
-
-    def validate_fb_url(form, field):
-        s = field.data.find('facebook.com')
-        if s == -1:
-            field.data = ''
-        else:
-            url = field.data[s:]
-            field.data = url
-
-class PostForm(Form):
-    isbn = TextField('isbn', validators = [Required()])
-    price = TextField('price')
-    condition = SelectField('condition', choices=[
-        ('Used - Like New', 'Used - Like New'),         
-        ('Used - Very Good', 'Used - Very Good'), 
-        ('Used - Good', 'Used - Good'), 
-        ('Used - Acceptable', 'Used - Acceptable'),
-        ('Used - Unacceptable', 'Used - Unacceptable'),
-        ('New', 'New')])
-    comments = TextAreaField('comments')
-    courses = TextField('courses')
-
-    def validate_price(form, field):
-        if field.data == '':
-            return
-
-        if not field.data.replace('.','',1).isdigit():
-            raise ValidationError('Price must be a number')
-        
-    def validate_isbn(form, field):
-        isbn = field.data.strip().replace('-','').replace(' ','')
-        if len(isbn) != 10 and len(isbn) != 13:
-            raise ValidationError('Invalid ISBN')
-        form.isbn = field
-
 def send_email(msg):
     mail.send(msg)
 
 def email_subbers(post):
+    sender = app.config["DEFAULT_MAIL_SENDER"]
     recip = post.book.subscribers.all()
     if len(recip) == 0:
         return
     recip = map(lambda x: x.user, recip)
     subj = 'New Offer for "%s"'%(str(post.book.title))
-    html = render_template('email.html',
-                           post=post)
+    html = render_template('email.html', post=post)
     msg = Message(subj, sender=sender, recipients=recip)
     msg.html = html
     thr = Thread(target = send_email, args = [msg])
@@ -219,7 +68,6 @@ def login():
     return render_template('login.html', 
                            title = 'Sign In',
                            login_form = form)
-
 
 def register_user(form):
     email = form.email.data
