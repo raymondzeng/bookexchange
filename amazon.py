@@ -20,10 +20,9 @@ def get_amazon_info(isbn):
     soup = BeautifulSoup(response)
     error = soup.message
     if error is None:
-        info = {'url': soup.detailpageurl.string,
+        return {'url': soup.detailpageurl.string,
                 'title': soup.title.string, 
                 'author': map(lambda x: x.get_text(), soup.find_all("author"))}
-        return info
     else:
         return None
 
@@ -58,7 +57,6 @@ def get_chegg_info(isbn):
         author = author.string
 
     title = soup.find_all('div', class_='book-title-container')[0].span.span.string
-    info = {'url': None,
+    return {'url': None,
             'title': title,
             'authors': [author]}
-    return info

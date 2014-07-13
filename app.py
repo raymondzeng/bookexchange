@@ -21,6 +21,10 @@ lm.login_view = '/login'
 
 mail = Mail(app)
 
+def add_commit(database, thing):
+    database.session.add(thing)
+    database.session.commit()
+
 def send_email(msg):
     mail.send(msg)
 
@@ -49,10 +53,10 @@ def load_user(user_id):
 
 @app.route('/', methods=['GET','POST'])
 def index():
-    if not current_user.is_authenticated():
-        return render_template('index.html')
-    return render_template('home.html')
-
+    if current_user.is_authenticated():
+        return render_template('home.html')
+    return render_template('index.html')
+    
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if current_user is not None and current_user.is_authenticated():
@@ -74,8 +78,7 @@ def register_user(form):
     password = form.password.data
     fb_url = form.fb_url.data
     user = User(email=email, password=password, fb_url=fb_url)
-    db.session.add(user)
-    db.session.commit()
+    add_commit(db, user)
     return user
 
 @app.route('/register', methods=['GET','POST'])
@@ -102,11 +105,12 @@ def logout():
 
 @app.route('/search')
 def search():
+    book_query_str = "setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    || setweight(to_tsvector(coalesce(title,'')), 'B')  || setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') || setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B') @@ plainto_tsquery(:ss)"
     searchterms = request.args.get('q')
     if searchterms is None:
         return redirect(url_for('index'))
     searchterms = process_string(searchterms)
-    results = Book.query.filter("setweight(to_tsvector(coalesce(isbn::text,'')), 'A')    || setweight(to_tsvector(coalesce(title,'')), 'B')  || setweight(to_tsvector(coalesce(array_to_string(author,', '),'')), 'B') || setweight(to_tsvector(coalesce(array_to_string(courses,', '),'')), 'B') @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
+    results = Book.query.filter(book_query_str).params(ss=searchterms).all()
     #results = Book.query.filter("tsv @@ plainto_tsquery(:ss)").params(ss=searchterms).all()
     
     # for flexible course code search: ABCD##, ABCD### -> ABCD0###
@@ -165,8 +169,7 @@ def post():
             info = get_amazon_info(isbn)
             image = get_amazon_image(isbn)
             b = Book(isbn=isbn, title=info['title'], author=info['author'], amazon_url=info['url'], image=image, courses=[courses])
-            db.session.add(b)
-            db.session.commit()
+            add_commit(db, b)
         else:
             b = Book.query.get(isbn)
             old_courses = list(b.courses)
@@ -174,8 +177,7 @@ def post():
             b.courses = list(set(old_courses))
             db.session.commit()
         p = Post(uid=current_user.id, timestamp=datetime.utcnow(), isbn=isbn, price=price,condition=cond,comments=comments)
-        db.session.add(p)
-        db.session.commit()
+        add_commit(db, p)
         email_subbers(p)
         return redirect(url_for('book',isbn=isbn))
     return render_template('post.html',
@@ -215,8 +217,7 @@ def subscribe():
     isbn = request.form['isbn']
     email = current_user.email
     s = Subscription(timestamp=datetime.utcnow(), user=email, isbn=isbn)
-    db.session.add(s)
-    db.session.commit()
+    add_commit(db, s)
     return redirect(request.referrer)
 
 @app.route('/unsubscribe',methods=['POST'])
@@ -242,7 +243,7 @@ def info(isbn):
             image=i.image,
             author=i.author,
             courses=i.courses)
-    time.sleep(1)
+    time.sleep(1) # dont send requests too fast to not spam amazon
     img = get_amazon_image(isbn)
     time.sleep(1)
     info = get_amazon_info(isbn)

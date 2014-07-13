@@ -33,19 +33,19 @@ def add_book(isbn, course, amz_info, amz_image):
 isbns = pickle.load(open('isbn.p','rb'))
 
 # a list of tuples of only courses that have books
-c = []
-for course in isbns:
-    if course['isbns'] != []:
-        c.append(course)
+# c = []
+# for course in isbns:
+#     if course['isbns'] != []:
+#         c.append(course)
 
-# remove all invalid isbns; I believe the invalid ones are brown bookstore lab packets etc.
+c = filter(lambda x: x['isbns'] != [], isbns)
+
+# remove all invalid isbns; ie not a digit; I believe the invalid ones are brown bookstore lab packets etc.
 clean = []
 for course in c:
-    i = []
-    for isbn in course['isbns']:
-        if isbn.isdigit():
-            i.append(isbn)
-    clean.append({'id': course['id'], 'isbns': list(set(i))})
+    clean.append({'id': course['id'], 
+                  'isbns': list(set(filter(isdigit, course['isbns'])))})
+
 """
 # populate database
 while True:
